@@ -26,6 +26,7 @@ const ProjectManagementNewPage: NextPage = () => {
 		setError('');
 		if (projectName.length < 1) {
 			setError('Project name is required');
+			return;
 		}
 		const newProject = DMXProject.empty(projectName);
 
@@ -51,7 +52,7 @@ const ProjectManagementNewPage: NextPage = () => {
 	};
 
 	return (
-		<div className="flex justify-center dark:bg-gray-900 bg-gray-100 h-screen w-screen overflow-hidden text-center dark:text-white">
+		<div className="flex justify-center text-black dark:bg-gray-900 bg-gray-100 h-screen w-screen overflow-hidden text-center dark:text-white">
 			<div className="self-center">
 				<h1 className="text-3xl font-semibold">New Project</h1>
 				<p className="my-1">Please enter a project name</p>
@@ -68,11 +69,15 @@ const ProjectManagementNewPage: NextPage = () => {
 					/>
 				</div>
 				<button
-					className="my-4 bg-blue-500 p-2 px-4 rounded-xl text-white"
+					className="mt-4 bg-blue-500 p-2 px-4 rounded-xl text-white"
 					onClick={createProject}
 				>
 					Continue
 				</button>
+				<p></p>
+				<button className={"my-2 underline text-blue-500 hover:text-blue-400"} onClick={() => {
+					router.push("/")
+				}}>Back</button>
 				{error !== '' ? <p className="text-red-500">{error}</p> : <div />}
 			</div>
 		</div>

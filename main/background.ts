@@ -1,7 +1,7 @@
 import { app, dialog, Menu } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
-import { ipcMain } from 'electron';
+import { ipcMain, shell } from 'electron';
 import fs from "fs";
 import FX5IntServer from "./interface_servers/FX5IntServer";
 import {NotificationCenterElement, NotificationCenterElementStatus} from "../renderer/components/appContextProvider";
@@ -184,7 +184,17 @@ var mainWindow: Electron.CrossProcessExports.BrowserWindow;
 		})
 	})
 
+	mainWindow.webContents.on('new-window', function(event, url){
+		event.preventDefault();
+		shell.openExternal(url);
+	});
+
+
 })();
+
+ipcMain.on("app::get-version", () => {
+	mainWindow.webContents.send("app::version", app.getVersion())
+})
 
 ipcMain.on('open-file-dialog', () => {
 	dialog

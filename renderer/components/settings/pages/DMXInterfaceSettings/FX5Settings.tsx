@@ -9,6 +9,7 @@ import {DDMUICCDropdownOptionType} from "../../../../devices/device_definitions"
 import {FoundInterface} from "../../../../backend/Interface/DMXInterface";
 import FX5Interface from "../../../../backend/Interface/DMXI_FX5";
 import {v4 as uuidv4} from "uuid";
+import {set as setCookie, get as getCookie} from 'es-cookie';
 
 interface DMXFX5Settings_Props {
     selectedInterface: FoundInterface
@@ -26,6 +27,16 @@ const DMXFX5Settings: FunctionComponent<DMXFX5Settings_Props> = ({selectedInterf
             if (result) {
                 (projectManager.interface as FX5Interface).dmxMode = value;
                 setSelectedMode(value);
+
+                const storedInterfaceDataString = getCookie("dmxInterface");
+                if (storedInterfaceDataString) {
+                    const storedInterfaceData = JSON.parse(storedInterfaceDataString);
+                    if (storedInterfaceData && storedInterfaceData.type === "fx5") {
+                        storedInterfaceData.mode = value;
+                        setCookie("dmxInterface", JSON.stringify(storedInterfaceData), {expires: 365})
+                    }
+                }
+
             }
         }
         catch(err) {

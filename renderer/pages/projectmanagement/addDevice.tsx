@@ -249,7 +249,7 @@ const AddDevicePage: NextPage = () => {
 					)}
 					<h1 className="text-white text-3xl font-bold">Add Device</h1>
 				</div>
-				<div className="flex flex-col h-full justify-between">
+				<div className={`flex flex-col h-full justify-between overflow-y-scroll mb-2 ${styles.noscrollbar}`}>
 					<div className="mx-8">
 						<h2 className="text-white text-lg">Device List</h2>
 						<div className="bg-gray-300 p-2 w-full rounded-lg flex flex-col items-center shadow-xl">

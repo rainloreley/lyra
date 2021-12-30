@@ -4,6 +4,7 @@ import {ReactElement, useState} from "react";
 import { v4 as uuidv4 } from "uuid";
 import CloseButton from "../../components/small/close_button";
 import DMXInterfaceSettings from "../../components/settings/pages/DMXInterfaceSettings";
+import SettingsAbout from "../../components/settings/pages/SettingsAbout";
 
 const SettingsIndex: NextPage = () => {
     const router = useRouter();
@@ -18,6 +19,11 @@ const SettingsIndex: NextPage = () => {
             id: "002",
             title: "DMX Interface",
             element: <DMXInterfaceSettings />
+        },
+        {
+            id: "003",
+            title: "About",
+            element: <SettingsAbout />
         }
     ]
 

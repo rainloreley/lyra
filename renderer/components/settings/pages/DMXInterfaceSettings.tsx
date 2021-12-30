@@ -9,6 +9,7 @@ import {DDMUICCDropdownOptionType} from "../../../devices/device_definitions";
 import DMXFX5Settings from "./DMXInterfaceSettings/FX5Settings";
 import styles from "../../../styles/Dashboard_Sidebar.module.css"
 import {CheckCircle} from "react-feather";
+import {set as setCookie, remove as removeCookie} from 'es-cookie';
 
 
 const DMXInterfaceSettings: FunctionComponent = ({}) => {
@@ -87,6 +88,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
 
         };
         if (selectedInterface?.id === id) {
+            removeCookie("dmxInterface");
             setSelectedInterface(null);
             return;
         }
@@ -95,11 +97,11 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
             if (newInterface.type === "fx5") {
 
                 projectManager.interface = new FX5Interface(newInterface.id)
-
                     try {
                         const openResult = await projectManager.interface.openLink();
                     if (openResult) {
                         setSelectedInterface(availableInterfaces.find((e) => e.id === id));
+                        setCookie("dmxInterface", JSON.stringify({type: newInterface.type, serial: newInterface.serial, mode: (projectManager.interface as FX5Interface).dmxMode}), {expires: 365})
                     }
                 }
                 catch(err) {

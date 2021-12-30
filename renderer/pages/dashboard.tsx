@@ -10,6 +10,8 @@ import DashboardSidebar from "../components/dashboard_sidebar";
 import FX5Interface from "../backend/Interface/DMXI_FX5";
 import HID, {devices} from "node-hid";
 import {AlertTriangle} from "react-feather";
+import {get as getCookie} from "es-cookie"
+import {store} from "next/dist/build/output/store";
 const Dashboard: NextPage = () => {
 
     const router = useRouter();
@@ -19,7 +21,40 @@ const Dashboard: NextPage = () => {
     } = useContext(AppControlContext);
 
     useEffect(() => {
+        enableStoredInterface();
     }, []);
+
+    const enableStoredInterface = async () => {
+        if (projectManager.interface === undefined) {
+            const storedInterfaceDataString = getCookie("dmxInterface")
+            if (storedInterfaceDataString) {
+                const storedInterfaceData = JSON.parse(storedInterfaceDataString);
+                if (storedInterfaceData.type === "fx5") {
+                    const availableInterfaces = await FX5Interface.findInterfaces();
+                    const interfaceBySerial = availableInterfaces.find((e) => e.serial === storedInterfaceData.serial);
+                    if (interfaceBySerial) {
+
+                        try {
+                            projectManager.interface = new FX5Interface(interfaceBySerial.id)
+                            const openResult = await projectManager.interface.openLink();
+                            const modeResult = await (projectManager.interface as FX5Interface).setDMXMode(storedInterfaceData.mode)
+                            if (modeResult) {
+                                (projectManager.interface as FX5Interface).dmxMode = storedInterfaceData.mode;
+                            }
+
+                        }
+                        catch {
+
+                        }
+                    }
+
+                }
+                else {
+                    console.error("Interface not supported!")
+                }
+            }
+        }
+    }
 
     return (
         <div className="overflow-hidden w-screen text-black h-screen">

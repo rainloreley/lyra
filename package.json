@@ -22,6 +22,7 @@
 		"cors": "^2.8.5",
 		"electron-serve": "^1.1.0",
 		"electron-store": "^8.0.1",
+		"es-cookie": "^1.3.2",
 		"express": "^4.17.2",
 		"fs": "^0.0.1-security",
 		"node-hid": "^2.1.1",

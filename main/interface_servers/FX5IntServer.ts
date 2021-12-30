@@ -61,38 +61,48 @@ class FX5IntServer {
     }
 
     setDMXMode(mode: number): boolean {
-        if (!this.openInterface) {
-            return false;
-        }
-        else {
-            var buffer = Array(35).fill(0);
-            // report ID
-            buffer[0] = 0;
-            // 16 = mode change
-            buffer[1] = 16;
-            // data
-            buffer[2] = mode;
-            var res = this.openInterface.write(buffer);
-            if (res === 0) {
+        try {
+            if (!this.openInterface) {
                 return false;
             }
             else {
-                // success :D
-                return true;
+                var buffer = Array(35).fill(0);
+                // report ID
+                buffer[0] = 0;
+                // 16 = mode change
+                buffer[1] = 16;
+                // data
+                buffer[2] = mode;
+                var res = this.openInterface.write(buffer);
+                if (res === 0) {
+                    return false;
+                }
+                else {
+                    // success :D
+                    return true;
+                }
             }
+        }
+        catch {
+            return false;
         }
     }
 
     sendDMX(channel: number, value: number) {
-        this.dmxoutmap.find((e) => e.channel === channel).value = value;
-        for (var i = 0; i < 16; i++) {
-            var buffer = Array(34).fill(0);
-            buffer[0] = 0;
-            buffer[1] = i;
-            for (var j = 2; j < 34; j++) {
-                buffer[j] = this.dmxoutmap.find((e) => e.channel === (i * 32) + j - 1).value;
+        try {
+            this.dmxoutmap.find((e) => e.channel === channel).value = value;
+            for (var i = 0; i < 16; i++) {
+                var buffer = Array(34).fill(0);
+                buffer[0] = 0;
+                buffer[1] = i;
+                for (var j = 2; j < 34; j++) {
+                    buffer[j] = this.dmxoutmap.find((e) => e.channel === (i * 32) + j - 1).value;
+                }
+                const res = this.openInterface.write(buffer);
             }
-            const res = this.openInterface.write(buffer);
+        }
+        catch {
+
         }
     }
 

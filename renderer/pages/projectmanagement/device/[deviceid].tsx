@@ -102,7 +102,7 @@ const DeviceConfigPage: NextPage = () => {
 	};
 
 	return (
-		<div className="bg-gray-100 dark:bg-gray-900 h-screen w-screen flex">
+		<div className="bg-gray-100 dark:bg-gray-900 text-black dark:text-white h-screen w-screen flex">
 			{deviceInfo === null ? (
 				<div className="w-full h-full justify-center">
 					<p className="self-center text-center text-3xl font-bold">
