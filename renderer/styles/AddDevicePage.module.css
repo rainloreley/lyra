@@ -1,0 +1,52 @@
+.wave {
+	aspect-ratio: 100/900;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-image: url('/svg/_adddevice-wave-light.svg');
+	background-color: #f3f4f6;
+}
+
+.addDeviceView {
+	background-color: #c62368;
+}
+
+.patchMapView {
+	background-color: #f3f4f6;
+}
+
+.noscrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+.noscrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.deviceList {
+	background-color: #eb1c74;
+}
+
+@media (prefers-color-scheme: dark) {
+	.wave {
+		background-image: url('/svg/_adddevice-wave-dark.svg');
+		background-color: #001220;
+	}
+
+	.patchMapView {
+		background-color: #001220;
+	}
+}
+
+.patchgrid {
+	@apply m-4 rounded-xl;
+	display: grid;
+	width: 95%;
+	grid-template-columns: repeat(auto-fill, 60px);
+	grid-column-gap: 1em;
+	grid-row-gap: 0em;
+	overflow-y: scroll;
+	height: 100%;
+}

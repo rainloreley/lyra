@@ -1,0 +1,10 @@
+.devicegrid {
+    @apply flex h-full w-full justify-center;
+    /*width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-column-gap: 0em;
+    grid-row-gap: 1em;
+    overflow-y: scroll;
+    height: 100%;*/
+}

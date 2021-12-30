@@ -1,0 +1,16 @@
+appId: dev.lory.lyra
+productName: Lyra
+copyright: Copyright © 2021
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
+fileAssociations:
+  - ext: lyra
+    name: Lyra Light File
+    role: Editor
