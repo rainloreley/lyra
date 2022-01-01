@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import Head from 'next/head';
 import { ipcRenderer } from 'electron';
 import {
@@ -13,48 +13,13 @@ import fs from "fs";
 
 function Home() {
 
-	const { projectManager, setProjectManager, addNotification } = useContext(AppControlContext);
+	const { setProjectManager, addNotification } = useContext(AppControlContext);
 	const router = useRouter();
-
-
-
-	/*useEffect(() => {
-		//console.log(HID.devices())
-		ipcRenderer.on("app::project:file:loaded", (event, data) => {
-			console.log(data);
-
-
-			try {
-				const project = new DMXProject(JSON.parse(data.data));
-				setProjectManager((e) => {
-					e.projectFilePath = data.path
-					e.currentProject = project
-					return e;
-				})
-				router.push("/dashboard");
-			}
-			catch(err) {
-				// error :(
-				const notification: NotificationCenterElement = {
-					uid: uuidv4(),
-					text: err.message,
-					status: NotificationCenterElementStatus.error,
-					dismissAt: Date.now() + 3000
-				}
-				addNotification(notification)
-			}
-		})
-	}, []);*/
 
 	ipcRenderer?.on("app::project-file-loaded", (event, data) => {
 		try {
 			const fileResult = fs.readFileSync(data, {encoding: "utf-8"});
-			//console.log(fileResult)
 			parseFile(data, fileResult)
-			/*mainWindow.webContents.send("app::project:file:loaded", {
-                path: result.filePaths[0],
-                data: fileResult
-            });*/
 		}
 		catch(err) {
 			const notification: NotificationCenterElement = {
@@ -66,37 +31,6 @@ function Home() {
 			addNotification(notification)
 		}
 	})
-
-	/*const openFileHandler = () => {
-		dialog
-			.showOpenDialog({
-				properties: ['openFile'],
-				filters: [{ extensions: ['lyra'], name: 'Lyra' }],
-			})
-			.then((result) => {
-				if (!result.canceled) {
-					try {
-						const fileResult = fs.readFileSync(result.filePaths[0], {encoding: "utf-8"});
-						//console.log(fileResult)
-						parseFile(result.filePaths[0], fileResult)
-						/*mainWindow.webContents.send("app::project:file:loaded", {
-                            path: result.filePaths[0],
-                            data: fileResult
-                        });
-					}
-					catch(err) {
-						const notification: NotificationCenterElement = {
-							uid: uuidv4(),
-							text: err.message,
-							status: NotificationCenterElementStatus.error,
-							dismissAt: Date.now() + 3000
-						}
-						addNotification(notification)
-					}
-				}
-			});
-		//ipcRenderer.sendSync('open-file-dialog');
-	}*/
 
 	const parseFile = (path: string, data: string) => {
 		try {

@@ -255,8 +255,6 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
         const checkedChannels = channelsCopy.filter((e) => e.checked === true);
         const uncheckedChannels = channelsCopy.filter((e) => e.checked === false);
 
-        console.log(checkedChannels)
-
         if (checkedChannels.length === channelsCopy.length) {
             setCheckState(NewSceneOverlayDeviceCellGlobalCheckState.all);
         }
@@ -278,8 +276,6 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
     }
 
     useEffect(() => {
-        console.log(device.mode)
-        console.log((device.device as DeviceDefinition).modes[device.mode].channels)
         setChannels((device.device as DeviceDefinition).modes[device.mode].channels.map((e) => {
             const obj: NewSceneOverlayDeviceCellChannel = {
                 channel: e.channel,
@@ -323,15 +319,6 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
                         return newState;
                     })
 
-
-                    /*var channelsCopy = [...channels];
-                    for (var i = 0; i < channelsCopy.length; i++) {
-                        channelsCopy[i].checked = e.target.checked;
-                    }
-                    console.log(channelsCopy)
-                    setChannels(channelsCopy);
-                    setShowChannels(false);*/
-                    //setShowChannels(true);
                 }} />
                 <button className={"flex items-center ml-1"} onClick={() => setShowChannels(!showChannels)}>
                     <div className={"mr-1"}>
@@ -413,7 +400,6 @@ const NewSceneOverlayDeviceCellChannelView: FunctionComponent<NewSceneOverlayDev
     const [channelChecked, setChannelChecked] = useState(channel.checked);
 
     useEffect(() => {
-        console.log(channel.checked);
         setChannelValue(channel.value);
         setChannelChecked(channel.checked);
     }, [channel]);

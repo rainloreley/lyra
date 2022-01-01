@@ -45,7 +45,6 @@ class FX5IntServer {
             return interfaces;
         }
         catch(err) {
-            console.log(err);
             return [];
         }
     }
@@ -131,15 +130,13 @@ class FX5IntServer {
         this.io.listen(3019)
         this.io.on("connection", (socket) => {
 
-            socket.on("setdmx", (arg1, callback) => {
-                console.log(arg1);
+            socket.on("setdmx", (arg1) => {
                 if (typeof arg1 === "object" && typeof arg1.channel === "number" && typeof arg1.value === "number") {
                     this.sendDMX(arg1.channel, arg1.value);
                 }
             });
 
-            socket.on("setdmxmap", (arg1, callback) => {
-                console.log(arg1);
+            socket.on("setdmxmap", (arg1) => {
                 this.dmxoutmap = arg1;
                 this.sendDMX()
             })

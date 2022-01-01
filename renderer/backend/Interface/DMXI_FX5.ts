@@ -1,5 +1,4 @@
 import DMXInterface, {DMXMapElement, FoundInterface} from "./DMXInterface";
-import HID, {devices} from "node-hid";
 import {io, Socket} from "socket.io-client";
 import axios from "axios";
 
@@ -37,7 +36,7 @@ class FX5Interface extends DMXInterface {
     }
 
     public static isRunning(): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<boolean>((resolve) => {
             axios.get(`http://127.0.0.1:${FX5Interface.FX5_HTTP_SERVER_PORT}/`).then((result) => {
                 if (result.data.status === "alive") {
                     resolve(true);
@@ -45,7 +44,7 @@ class FX5Interface extends DMXInterface {
                 else {
                     resolve(false);
                 }
-            }).catch((err) => {
+            }).catch((_) => {
                 resolve(false);
             });
         })
@@ -71,12 +70,10 @@ class FX5Interface extends DMXInterface {
     }
 
     openLink(): Promise<boolean> {
-        const _id = this.id;
-        console.log(_id);
         return new Promise<boolean>((resolve, reject) => {
             axios.post(`http://127.0.0.1:${FX5Interface.FX5_HTTP_SERVER_PORT}/open`, {
                 path: this.id
-            }).then((result) => {
+            }).then((_) => {
                 resolve(true);
             }).catch((err) => {
                 reject(`${err} (${JSON.stringify(err.response.data.err)})`);
@@ -86,7 +83,7 @@ class FX5Interface extends DMXInterface {
 
     closeLink(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            axios.post(`http://127.0.0.1:${FX5Interface.FX5_HTTP_SERVER_PORT}/close`).then((result) => {
+            axios.post(`http://127.0.0.1:${FX5Interface.FX5_HTTP_SERVER_PORT}/close`).then((_) => {
                 resolve(true);
             }).catch((err) => {
                 reject(`${err} (${JSON.stringify(err.response.data.err)})`)
@@ -98,7 +95,7 @@ class FX5Interface extends DMXInterface {
         return new Promise<boolean>((resolve, reject) => {
             axios.post(`http://127.0.0.1:${FX5Interface.FX5_HTTP_SERVER_PORT}/mode`, {
                 mode: mode
-            }).then((result) => {
+            }).then((_) => {
                 resolve(true);
             }).catch((err) => {
                 reject(`${err} (${JSON.stringify(err.response.data.err)})`);
@@ -127,23 +124,10 @@ class FX5Interface extends DMXInterface {
     }
 
     sendDMX(channel: number, value: number) {
-        console.log(`sending ${value} to channel ${channel}`);
         this.socket.emit("setdmx", {channel: channel, value: value});
-        /*this.dmxoutmap.find((e) => e.channel === channel).value = value;
-        for (var i = 0; i < 16; i++) {
-            var buffer = Array(34).fill(0);
-            buffer[0] = 0;
-            buffer[1] = i;
-            for (var j = 2; j < 34; j++) {
-                buffer[j] = this.dmxoutmap.find((e) => e.channel === (i * 32) + j - 2).value;
-            }
-            const res = this.openInterface.write(buffer);
-            console.log(`Written ${res} bytes to interface (${i + 1}/16)`);
-        }*/
     }
 
     sendDMXMap(map: DMXMapElement[]) {
-        console.log(`sending dmxmap to interface`)
         this.socket.emit("setdmxmap", map);
     }
 

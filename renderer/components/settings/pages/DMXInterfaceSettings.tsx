@@ -4,8 +4,6 @@ import FX5Interface from "../../../backend/Interface/DMXI_FX5";
 import {useRouter} from "next/dist/client/router";
 import {AppControlContext, NotificationCenterElement, NotificationCenterElementStatus} from "../../appContextProvider";
 import {v4 as uuidv4} from "uuid";
-import DeviceDropdown from "../../device_components/dropdown";
-import {DDMUICCDropdownOptionType} from "../../../devices/device_definitions";
 import DMXFX5Settings from "./DMXInterfaceSettings/FX5Settings";
 import styles from "../../../styles/Dashboard_Sidebar.module.css"
 import {CheckCircle} from "react-feather";
@@ -16,7 +14,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
 
     const router = useRouter();
 
-    const { projectManager, setProjectManager, addNotification } = useContext(AppControlContext);
+    const { projectManager, addNotification } = useContext(AppControlContext);
 
     const [interfaceServers, setInterfaceServers] = useState<InterfaceServerEntry[]>([
         {
@@ -57,11 +55,9 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
             var foundInterfaces: FoundInterface[] = [];
             if (server.id == "fx5") {
                 foundInterfaces = await FX5Interface.findInterfaces();
-                console.log(foundInterfaces)
                 interfaces = interfaces.concat(foundInterfaces)
             }
         }
-        console.log(interfaces);
         setAvailableInterfaces(interfaces);
         const selectedInterfaceObject = interfaces.find((e) => e.id === projectManager.interface?.id)
         if (selectedInterfaceObject) {
@@ -86,7 +82,8 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                 return;
             }
 
-        };
+        }
+
         if (selectedInterface?.id === id) {
             removeCookie("dmxInterface");
             setSelectedInterface(null);
@@ -181,7 +178,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                                             {_interface.id === selectedInterface?.id ? (
                                                 <CheckCircle className={"self-center mr-2"} size={18} color={"#22c55e"} />
 
-                                            ) : (<div></div>)}
+                                            ) : (<div />)}
                                             <div className={"flex flex-col"}>
                                                 <h3 className={"text-md font-semibold"}>{_interface.name}</h3>
                                                 <p className={"italic text-sm text-gray-500"}>{_interface.serial}</p>

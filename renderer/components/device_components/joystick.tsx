@@ -1,7 +1,5 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { DMXProjectDeviceChannelState } from '../../backend/structs/DMXProjectDevice';
-
-import { Joystick } from 'react-joystick-component';
 import Draggable from 'react-draggable';
 interface Device_Joystick {
 	valueupdate: (axis: Device_Joystick_Axis, value: number) => void;
@@ -93,9 +91,6 @@ const DeviceJoystick: FunctionComponent<Device_Joystick> = ({
 					grid={[2, 2]}
 					bounds="parent"
 					scale={1}
-					onStart={(e, data) => {
-						console.log(data);
-					}}
 					onDrag={(e, data) => {
 						setXState(data.x);
 						setYState(data.y);
@@ -109,7 +104,7 @@ const DeviceJoystick: FunctionComponent<Device_Joystick> = ({
 				>
 					<div className="w-4 h-4">
 						<div className="handle">
-							<div className="w-4 h-4 rounded-full bg-red-600"></div>
+							<div className="w-4 h-4 rounded-full bg-red-600" />
 						</div>
 					</div>
 				</Draggable>
@@ -120,21 +115,3 @@ const DeviceJoystick: FunctionComponent<Device_Joystick> = ({
 
 export default DeviceJoystick;
 export { Device_Joystick_Axis };
-/** 
- * 
- * 			<ReactNipple
-				// supports all nipplejs options
-				// see https://github.com/yoannmoinet/nipplejs#options
-				options={{ mode: 'static', position: { top: '50%', left: '50%' } }}
-				// any unknown props will be passed to the container element, e.g. 'title', 'style' etc
-				style={{
-					outline: `1px dashed red`,
-					width: 150,
-					height: 150,
-					// if you pass position: 'relative', you don't need to import the stylesheet
-				}}
-				// all events supported by nipplejs are available as callbacks
-				// see https://github.com/yoannmoinet/nipplejs#start
-				onMove={(evt: any, data: any) => console.log(evt, data)}
-			/>
-*/

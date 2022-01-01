@@ -101,17 +101,11 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
             const device = projectManager.currentProject.devices.find((e) => device_state.device_id === e.id);
             if (device) {
                 for (var channel of device_state.channels) {
-                    console.log(`device ${JSON.stringify(device)} and ${JSON.stringify(device_state)}`)
-                    if (device.id.includes("56cd")) {
-                        console.log(`DUMP STUFF: ${device.id} ${device.start_channel} ${channel.channel} ${channel.value}`)
-                    }
                     dmxoutmap.find((e) => e.channel === device.start_channel + channel.channel - 1).value = channel.value;
                     dmxoutmap.find((e) => e.channel === device.start_channel + channel.channel - 1).device = device.id;
                 }
             }
         }
-
-        console.log(`ERRRRRRR: ${JSON.stringify(dmxoutmap.find((e) => e.channel === 31))}`)
 
         // at the end, we send that data to a function in the context
         // that accepts dmx maps and forwards them to the right dmx server

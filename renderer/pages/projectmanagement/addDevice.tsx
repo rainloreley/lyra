@@ -126,7 +126,6 @@ const AddDevicePage: NextPage = () => {
 							devicecount;
 					i++
 				) {
-					console.log(e[i - 1].channel);
 					if (
 						e[i - 1].devices.findIndex((f) => f.id === '__newdevice') === -1
 					) {

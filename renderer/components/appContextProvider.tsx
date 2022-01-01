@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import ProjectManager from "../backend/ProjectManager";
 import fs from "fs";
 import DMXProject from "../backend/structs/DMXProject";
-import HID from "node-hid";
 import {useRouter} from "next/dist/client/router";
 
 type AppControlHandlerProps = {
@@ -91,7 +90,6 @@ const AppControlProvider = ({ children }) => {
 		});
 
 		ipcRenderer.on('show-error', (event, error) => {
-			console.log('received noti');
 			const notification: NotificationCenterElement = {
 				uid: uuidv4(),
 				text: error,
@@ -143,9 +141,6 @@ const AppControlProvider = ({ children }) => {
 			for (var map_element of map) {
 				const device = e.currentProject.devices.find((e) => e.id === map_element.device);
 				if (device) {
-					console.log(map_element)
-					console.log(device);
-					console.log(device.channel_state.find((e) => e.channel === map_element.channel - device.start_channel + 1))
 					device.channel_state.find((e) => e.channel === map_element.channel - device.start_channel + 1).value = map_element.value;
 				}
 			}
@@ -245,7 +240,7 @@ const AppControlProvider = ({ children }) => {
 											<LoadingSpinner color="#ffffff" size={'25'} />
 										</div>
 									) : (
-										<div></div>
+										<div />
 									)}
 								</div>
 							))}
@@ -257,7 +252,7 @@ const AppControlProvider = ({ children }) => {
 								</div>
 							</div>
 						) : (
-							<div></div>
+							<div />
 						)}
 
 
