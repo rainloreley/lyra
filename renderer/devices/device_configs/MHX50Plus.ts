@@ -46,22 +46,6 @@ const Stairville_MHX50Plus: DeviceDefinition = {
 					name: 'Gobo rotation',
 				},
 				{
-					channel: 3,
-					name: 'Color wheel',
-				},
-				{
-					channel: 4,
-					name: 'Shutter',
-				},
-				{
-					channel: 5,
-					name: 'Gobo wheel',
-				},
-				{
-					channel: 6,
-					name: 'Gobo rotation',
-				},
-				{
 					channel: 7,
 					name: 'Prism',
 				},

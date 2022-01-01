@@ -1,5 +1,6 @@
 interface DMX_DeviceStateSnapshot {
-    deviceid: string;
+    device_id: string;
+    channels: DMX_DeviceStateSnapshotChannelValue[];
 
 }
 

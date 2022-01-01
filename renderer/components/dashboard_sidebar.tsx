@@ -41,7 +41,7 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
     return (
         <div className="pb-4 left-4 absolute bottom-4 top-4 flex">
             <div className="dark:bg-gray-800 bg-gray-200 p-4 shadow-2xl rounded-2xl flex flex-col w-80 bottom-4">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <div className="flex">
                         <h1 className="font-bold dark:text-white text-xl">
                             {selectedDevice.name}
@@ -56,7 +56,7 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
                         </button>
                     </div>
 
-                    <CloseButton buttonPressed={() => setSelectedDevice(null)} size={6} />
+                    <CloseButton buttonPressed={() => setSelectedDevice(null)} size={5} />
                 </div>
                 <p className="dark:text-gray-400 text-gray-500 text-sm mb-2">
                     {

@@ -6,6 +6,7 @@ import {
 import DMXProjectScene from './DMXProjectScene';
 import { v4 as uuidv4 } from 'uuid';
 import DMXProjectSceneGroup from './DMXProjectSceneGroup';
+import DMX_DeviceStateSnapshot from "./DMX_DeviceStateSnapshot";
 
 class DMXProject {
 	uid: string;
@@ -50,7 +51,35 @@ class DMXProject {
 		});
 		this.scene_groups = (json.scene_groups ?? []).map(
 			(item: DMXProjectSceneGroup) => {
-				return item;
+				const obj: DMXProjectSceneGroup = {
+					id: item.id,
+					name: item.name,
+					color: item.color,
+					scenes: item.scenes.map((scene) => {
+						const scene_obj: DMXProjectScene = {
+							id: scene.id,
+							name: scene.name,
+							fadein_time: scene.fadein_time,
+							device_states: scene.device_states.map((devicestate) => {
+								const ds_obj: DMX_DeviceStateSnapshot = {
+									device_id: devicestate.device_id,
+									channels: devicestate.channels.map((channel) => {
+										const channel_obj: DMXProjectDeviceChannelState = {
+											channel: channel.channel,
+											value: channel.value
+										}
+										return channel_obj;
+									})
+								}
+								return ds_obj
+							})
+						}
+
+						return scene_obj;
+					})
+				}
+
+				return obj;
 			}
 		);
 	}
@@ -63,8 +92,9 @@ class DMXProject {
 			devices: [],
 			scene_groups: [
 				{
-					id: uuidv4(),
-					name: 'Default',
+					id: "main",
+					name: 'Main',
+					color: "#ef4444",
 					scenes: [],
 				},
 			],

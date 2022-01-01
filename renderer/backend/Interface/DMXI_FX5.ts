@@ -142,6 +142,11 @@ class FX5Interface extends DMXInterface {
         }*/
     }
 
+    sendDMXMap(map: DMXMapElement[]) {
+        console.log(`sending dmxmap to interface`)
+        this.socket.emit("setdmxmap", map);
+    }
+
 
 }
 

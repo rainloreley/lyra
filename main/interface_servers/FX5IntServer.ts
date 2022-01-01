@@ -88,9 +88,11 @@ class FX5IntServer {
         }
     }
 
-    sendDMX(channel: number, value: number) {
+    sendDMX(channel?: number, value?: number) {
         try {
-            this.dmxoutmap.find((e) => e.channel === channel).value = value;
+            if (typeof channel === "number" && typeof value === "number") {
+                this.dmxoutmap.find((e) => e.channel === channel).value = value;
+            }
             for (var i = 0; i < 16; i++) {
                 var buffer = Array(34).fill(0);
                 buffer[0] = 0;
@@ -134,6 +136,12 @@ class FX5IntServer {
                 if (typeof arg1 === "object" && typeof arg1.channel === "number" && typeof arg1.value === "number") {
                     this.sendDMX(arg1.channel, arg1.value);
                 }
+            });
+
+            socket.on("setdmxmap", (arg1, callback) => {
+                console.log(arg1);
+                this.dmxoutmap = arg1;
+                this.sendDMX()
             })
         })
     }

@@ -14,6 +14,7 @@ abstract class DMXInterface {
     openLink(): Promise<boolean> {return};
     closeLink(): Promise<boolean> {return};
     sendDMX(channel: number, value: number) {};
+    sendDMXMap(map: DMXMapElement[]) {};
 
 }
 

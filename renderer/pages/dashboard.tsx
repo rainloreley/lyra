@@ -9,13 +9,18 @@ import styles from "../styles/Dashboard.module.css"
 import DashboardSidebar from "../components/dashboard_sidebar";
 import FX5Interface from "../backend/Interface/DMXI_FX5";
 import HID, {devices} from "node-hid";
-import {AlertTriangle} from "react-feather";
+import {AlertTriangle, List, Settings} from "react-feather";
 import {get as getCookie} from "es-cookie"
 import {store} from "next/dist/build/output/store";
+import SceneList from "../components/dashboard/SceneList";
 const Dashboard: NextPage = () => {
 
     const router = useRouter();
     const [selectedDevice, setSelectedDevice] = useState<DMXProjectDevice | null>(null);
+
+    const [showSceneList, setShowSceneList] = useState<boolean>(false);
+
+
     const {
         projectManager, setProjectManager, addNotification
     } = useContext(AppControlContext);
@@ -84,6 +89,24 @@ const Dashboard: NextPage = () => {
                         }}>Add</button>
                     </div>
                 </div>
+                <div className={"flex dark:bg-gray-800 bg-gray-200 h-16 border-b-2 border-gray-300 dark:border-gray-800 justify-between shadow-lg rounded-xl mx-2"}>
+                    <div className={"flex justify-between w-full px-3 items-center h-full"}>
+                        <div className={"flex"}>
+                            <button className={"h-6 w-6"} onClick={() => {
+                                setShowSceneList(true);
+                            }}>
+                                <List />
+                            </button>
+                        </div>
+                        <div className={"flex"}>
+                            <button className={"h-6 w-6"} onClick={() => {
+                                router.push("/settings")
+                            }}>
+                                <Settings />
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div id="canvas" className="flex flex-row w-full h-full relative">
                     {selectedDevice != null ? (
                         <DashboardSidebar
@@ -123,6 +146,13 @@ const Dashboard: NextPage = () => {
                             </div>
                         )}
                     </div>
+                    {showSceneList ? (
+                        <SceneList closeView={() => {
+                            setShowSceneList(false);
+                        }} />
+                    ) : (
+                        <div />
+                    )}
                 </div>
             </div>
         </div>

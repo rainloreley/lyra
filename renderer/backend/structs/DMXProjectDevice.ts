@@ -14,4 +14,4 @@ interface DMXProjectDeviceChannelState {
     value: number;
 }
 
-export type {DMXProjectDevice, DMXProjectDeviceChannelState}
+export type { DMXProjectDevice, DMXProjectDeviceChannelState }

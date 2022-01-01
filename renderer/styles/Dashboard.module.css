@@ -1,5 +1,6 @@
 .devicegrid {
-    @apply flex h-full w-full justify-center;
+    /*@apply flex h-full w-full justify-center;*/
+    @apply flex flex-wrap w-full h-full;
     /*width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);

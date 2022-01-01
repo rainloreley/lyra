@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import {createContext, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, {createContext, Dispatch, SetStateAction, useEffect, useState, ReactElement} from 'react';
 import { clearInterval } from 'timers';
 import LoadingSpinner from './loadingSpinner';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,10 +11,13 @@ import {useRouter} from "next/dist/client/router";
 
 type AppControlHandlerProps = {
 	projectManager: ProjectManager;
-	setProjectManager: Dispatch<SetStateAction<ProjectManager>>
+	setProjectManager: Dispatch<SetStateAction<ProjectManager>>;
 	addNotification: (element: NotificationCenterElement) => void;
 	sendDMXCommand: (start_channel: number, channel: number, value: number) => void;
+	sendDMXMap: (map: DMXMapElement[]) => void;
 	saveProject:  (_project: DMXProject) => void;
+	setOverlayView: Dispatch<SetStateAction<ReactElement>>;
+
 };
 
 interface NotificationCenterElement {
@@ -44,6 +47,8 @@ const AppControlProvider = ({ children }) => {
 	var autosaveInterval: NodeJS.Timeout;
 
 	const [projectManager, setProjectManager] = useState<ProjectManager>(new ProjectManager());
+	const [ overlayView, setOverlayView ] = useState<ReactElement | null>(null);
+
 
 	useEffect(() => {
 		clearInterval(notificationcenterInterval);
@@ -123,6 +128,33 @@ const AppControlProvider = ({ children }) => {
 		})
 	}
 
+	function sendDMXMap(map: DMXMapElement[]) {
+		if (projectManager.interface !== undefined) {
+			projectManager.interface.sendDMXMap(map.map((e) => {
+				const obj = {
+					channel: e.channel,
+					value: e.value
+				}
+				return obj;
+			}));
+		}
+
+		setProjectManager((e) => {
+			for (var map_element of map) {
+				const device = e.currentProject.devices.find((e) => e.id === map_element.device);
+				if (device) {
+					console.log(map_element)
+					console.log(device);
+					console.log(device.channel_state.find((e) => e.channel === map_element.channel - device.start_channel + 1))
+					device.channel_state.find((e) => e.channel === map_element.channel - device.start_channel + 1).value = map_element.value;
+				}
+			}
+			return e;
+		})
+
+
+	}
+
 	function saveProject(_project: DMXProject) {
 		const notificationElement: NotificationCenterElement = {
 			uid: uuidv4(),
@@ -175,48 +207,78 @@ const AppControlProvider = ({ children }) => {
 		setProjectManager: setProjectManager,
 		addNotification: addElementToNotificationCenter,
 		sendDMXCommand: sendDMXCommand,
-		saveProject: saveProject
+		sendDMXMap: sendDMXMap,
+		saveProject: saveProject,
+		setOverlayView: setOverlayView
 	}
 
 	return (
-		<div>
+		<div className={"h-screen w-screen overflow-hidden dark:text-white bg-gray-100 dark:bg-gray-900"}>
+
+
 			<div
-				className={`flex flex-col dark:bg-gray-900 bg-gray-100 h-screen w-screen overflow-hidden dark:text-white`}
+				className={`flex flex-col h-screen w-screen overflow-hidden `}
 			>
-				<div className="absolute bottom-6 right-6 flex z-10 text-white flex-col">
-					{notificationCenter.map((notification) => (
-						<div
-							key={notification.uid}
-							className={`m-4 flex flex-row p-3 rounded-lg w-64 justify-between pl-4 ${
-								notification.status === NotificationCenterElementStatus.error
-									? 'bg-red-500'
-									: `${
-											notification.status ===
-											NotificationCenterElementStatus.success
-												? 'bg-green-400'
-												: 'bg-gray-400 dark:bg-gray-600'
-									  }`
-							}`}
-						>
-							<p>{notification.text}</p>
-							{notification.status ===
-							NotificationCenterElementStatus.loading ? (
-								<div className="w-5 ml-4 mr-2">
-									<LoadingSpinner color="#ffffff" size={'25'} />
-								</div>
-							) : (
-								<div></div>
-							)}
-						</div>
-					))}
-				</div>
+
 				<AppControlContext.Provider value={state}>
-					{children}
+
+					<div className={"h-screen relative overflow-hidden"}>
+						<div className="absolute bottom-6 right-6 flex z-20 text-white flex-col">
+							{notificationCenter.map((notification) => (
+								<div
+									key={notification.uid}
+									className={`m-4 flex flex-row p-3 rounded-lg w-64 justify-between pl-4 ${
+										notification.status === NotificationCenterElementStatus.error
+											? 'bg-red-500'
+											: `${
+												notification.status ===
+												NotificationCenterElementStatus.success
+													? 'bg-green-400'
+													: 'bg-gray-400 dark:bg-gray-600'
+											}`
+									}`}
+								>
+									<p>{notification.text}</p>
+									{notification.status ===
+									NotificationCenterElementStatus.loading ? (
+										<div className="w-5 ml-4 mr-2">
+											<LoadingSpinner color="#ffffff" size={'25'} />
+										</div>
+									) : (
+										<div></div>
+									)}
+								</div>
+							))}
+						</div>
+						{overlayView !== null ? (
+							<div className={"h-screen w-screen absolute top-0 z-10 bottom-0 left-0 right-0"}>
+								<div className={"flex w-full h-full justify-center items-center"}>
+									{overlayView}
+								</div>
+							</div>
+						) : (
+							<div></div>
+						)}
+
+
+
+						<div className={`${overlayView !== null ? "filter blur-md scale-105 transform" : ""}`}>
+							{children}
+						</div>
+					</div>
+
 				</AppControlContext.Provider>
 			</div>
 		</div>
 	);
 };
-export type {NotificationCenterElement};
+
+interface DMXMapElement {
+	channel: number;
+	device: string;
+	value: number;
+}
+
+export type {NotificationCenterElement, DMXMapElement};
 export { NotificationCenterElementStatus };
 export default AppControlProvider;
