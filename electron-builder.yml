@@ -3,7 +3,7 @@ productName: Lyra
 copyright: Copyright © 2021
 directories:
   output: dist
-  buildResources: resources
+  buildResources: build
 files:
   - from: .
     filter:
