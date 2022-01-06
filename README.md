@@ -19,7 +19,7 @@ yarn dev # or yarn build if you want a production build
 
 ## Supported devices
 
-After a recent update (b85aac6f1bc037f4d964e6d7c4c92d7e702905b3) it's now possible to add custom device config files in Lyras' app data folder:
+After a recent update (https://github.com/rainloreley/lyra/commit/b85aac6f1bc037f4d964e6d7c4c92d7e702905b3) it's now possible to add custom device config files in Lyras' app data folder:
 
 ```
 macOS: /Users/username/Library/Application Support/lyra/devices
