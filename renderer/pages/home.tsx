@@ -10,6 +10,7 @@ import {v4 as uuidv4} from "uuid";
 import {useRouter} from "next/router";
 import DMXProject from "../backend/structs/DMXProject";
 import fs from "fs";
+import dmxDevices from "../devices/devicelist";
 
 function Home() {
 
@@ -34,7 +35,19 @@ function Home() {
 
 	const parseFile = (path: string, data: string) => {
 		try {
-			const project = new DMXProject(JSON.parse(data));
+			const jsondata = JSON.parse(data);
+			for (var i = 0; i < jsondata.devices.length; i++) {
+				const device = jsondata.devices[i];
+				if (typeof device.device === "string") {
+					const deviceConfig = dmxDevices.findIndex((e) => e.uuid === device.device);
+					if (deviceConfig === -1 || deviceConfig === undefined) {
+						console.error(`ERROR: Project cannot be loaded because the config file for ${device.name} is missing (id ${device.device})`)
+						throw `Project cannot be loaded because the config file for ${device.name} is missing`
+						return;
+					}
+				}
+			}
+			const project = new DMXProject(jsondata);
 			setProjectManager((e) => {
 				e.projectFilePath = path
 				e.currentProject = project
@@ -46,7 +59,7 @@ function Home() {
 			// error :(
 			const notification: NotificationCenterElement = {
 				uid: uuidv4(),
-				text: err.message,
+				text: err.message || err,
 				status: NotificationCenterElementStatus.error,
 				dismissAt: Date.now() + 3000
 			}

@@ -11,7 +11,21 @@ const appDataFolder = appData("lyra");
 
 const dmxDevices: DeviceDefinition[] = [];
 
-function getAllDevicesFromFolder() {
+async function getAllDevicesFromFolder() {
+    if (!fs.existsSync(appDataFolder)) {
+        fs.mkdir(appDataFolder, (err) => {
+            if (err !== null) {
+                console.error(err)
+            }
+        })
+    }
+    if (!fs.existsSync(`${appDataFolder}/devices`)) {
+        fs.mkdir(`${appDataFolder}/devices`, (err) => {
+            if (err !== null) {
+                console.error(err);
+            }
+        })
+    }
     fs.readdir(`${appDataFolder}/devices`, function(err, files) {
         if (err) {
             // TODO: error handling
@@ -27,7 +41,6 @@ function getAllDevicesFromFolder() {
                         return;
                     }
                     try {
-                        console.log(filecontent);
                         const deviceConfig = JSON.parse(filecontent);
                         dmxDevices.push(deviceConfig);
                     }
@@ -37,7 +50,7 @@ function getAllDevicesFromFolder() {
                 })
             }
         });
-        console.log(dmxDevices)
+        console.log(`${dmxDevices.length} device configs loaded from ${appDataFolder}/devices`)
     })
 }
 
