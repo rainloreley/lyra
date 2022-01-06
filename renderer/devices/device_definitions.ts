@@ -56,8 +56,8 @@ interface DDMUICCColorWheelSubset {
 }
 
 enum DDMUICCColorWheelSubsetType {
-	static,
-	slider,
+	static = 0,
+	slider = 1,
 }
 
 interface DDMUICCSliderSettings {
@@ -75,7 +75,7 @@ interface DDMUICCButtonSettings {
 }
 
 enum DDMUICCButtonSettingsSpecialFunction {
-	reset_all_values,
+	reset_all_values = 0,
 }
 
 enum DeviceDefinitionModeUIChannelType {
@@ -95,8 +95,8 @@ interface DDMUICCDropdownOption {
 }
 
 enum DDMUICCDropdownOptionType {
-	static,
-	slider,
+	static = 0,
+	slider = 1,
 }
 
 export type {
