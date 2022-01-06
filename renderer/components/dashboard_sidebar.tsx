@@ -42,7 +42,7 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
         <div className="pb-4 left-4 absolute bottom-4 top-4 flex">
             <div className="dark:bg-gray-800 bg-gray-200 p-4 shadow-2xl rounded-2xl flex flex-col w-80 bottom-4">
                 <div className="flex justify-between items-center">
-                    <div className="flex">
+                    <div className="flex mr-2">
                         <h1 className="font-bold dark:text-white text-xl">
                             {selectedDevice.name}
                         </h1>

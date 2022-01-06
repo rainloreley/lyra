@@ -131,8 +131,8 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
                         }} />
                     ))}
                 </div>
-                <div className={"border-b border-gray-600 w-full px-2 pb-2"}>
-                    <input className={"border border-gray-500 bg-gray-600 rounded-lg w-full px-1"} placeholder={"Search"} value={searchField} onChange={(event) => {
+                <div className={"border-b border-gray-400 dark:border-gray-600 w-full px-2 pb-2"}>
+                    <input className={"border bg-gray-300 border-gray-400 dark:border-gray-500 dark:bg-gray-600 rounded-lg w-full px-1"} placeholder={"Search"} value={searchField} onChange={(event) => {
                         setSearchField(event.target.value);
                         loadScenes(selectedGroup, groups, event.target.value)
                     }}/>
@@ -162,9 +162,9 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
                         </div>
                     )}
                 </div>
-                <div className={"flex justify-end border-t border-gray-600 pt-2"}>
+                <div className={"flex justify-end border-t border-gray-400 dark:border-gray-600 pt-2"}>
                     <div>
-                        <button className={"bg-blue-500 rounded-xl w-10 h-10 text-xl"} onClick={() => {
+                        <button className={"bg-blue-500 text-white rounded-xl w-10 h-10 text-xl"} onClick={() => {
                             setOverlayView(<NewSceneOverlay />);
                         }}>+</button>
                     </div>
@@ -183,7 +183,7 @@ interface GroupButtonElement_Props {
 
 const GroupButtonElement: FunctionComponent<GroupButtonElement_Props> = ({name, color, isSelected, onSelect}) => {
     return (
-        <button className={`p-1 px-2 text-sm m-1 border ${isSelected ? "border-yellow-500 dark:border-yellow-300" : "border-gray-300 dark:border-gray-500"} rounded-full`} onClick={() => onSelect()}>
+        <button className={`p-1 px-2 text-sm m-1 border ${isSelected ? "border-yellow-500 dark:border-yellow-300" : "border-gray-400 dark:border-gray-500"} rounded-full`} onClick={() => onSelect()}>
             <div className={"flex items-center"}>
                 <div style={{backgroundColor: color}} className={`rounded-full w-4 h-4 mr-1`} />
                 <p>{name}</p>

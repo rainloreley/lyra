@@ -22,7 +22,7 @@ const Dashboard: NextPage = () => {
 
 
     const {
-        projectManager, setProjectManager, addNotification
+        projectManager
     } = useContext(AppControlContext);
 
     useEffect(() => {
@@ -46,10 +46,9 @@ const Dashboard: NextPage = () => {
                             if (modeResult) {
                                 (projectManager.interface as FX5Interface).dmxMode = storedInterfaceData.mode;
                             }
-
                         }
                         catch {
-
+                            console.error("Something went wrong while opening the interface")
                         }
                     }
 
@@ -77,16 +76,8 @@ const Dashboard: NextPage = () => {
                                 <p className={"text-red-500 ml-2 text-sm font-semibold italic self-center"}>No Interface enabled</p>
                             </div>
                         ) : (
-                            <div></div>
+                            <div />
                         )}
-                    </div>
-                    <div className={"flex"}>
-                        <button className={"text-white"} onClick={() => {
-                            router.push("/settings")
-                        }}>Settings</button>
-                        <button className={"text-white"} onClick={() => {
-                            router.push("/projectmanagement/addDevice?skipAllowed=false&hideBackButton=false")
-                        }}>Add</button>
                     </div>
                 </div>
                 <div className={"flex dark:bg-gray-800 bg-gray-200 h-16 border-b-2 border-gray-300 dark:border-gray-800 justify-between shadow-lg rounded-xl mx-2"}>
@@ -118,11 +109,11 @@ const Dashboard: NextPage = () => {
                     )}
                     <div id="device-canvas" className={styles.devicegrid}>
                         {projectManager.currentProject?.devices.length > 0 ? (
-                            <div>
+                            <div className={"m-2"}>
                                 {projectManager.currentProject?.devices.map((e) => (
                                     <button
                                         key={e.start_channel}
-                                        className="dark:text-white justify-self-center self-center"
+                                        className="dark:text-white justify-self-center self-center m-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-2xl"
                                         onClick={() => {
                                             setSelectedDevice(e);
                                         }}

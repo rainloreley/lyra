@@ -2,6 +2,7 @@ import {NextPage} from "next";
 import {useRouter} from "next/dist/client/router";
 import {useContext, useEffect} from "react";
 import {AppControlContext} from "../components/appContextProvider";
+import dmxDevices, { getAllDevicesFromFolder } from "../devices/devicelist";
 
 const Index: NextPage = () => {
     const router = useRouter();
@@ -24,6 +25,9 @@ const Index: NextPage = () => {
     }, [router.isReady]);
 
     async function initApp() {
+        if (dmxDevices.length === 0) {
+            getAllDevicesFromFolder();
+        }
         if (projectManager.currentProject === null) {
             router.push("/home")
         }

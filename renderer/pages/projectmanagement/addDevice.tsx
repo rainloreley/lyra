@@ -273,6 +273,7 @@ const AddDevicePage: NextPage = () => {
 									)
 									.map((device, index) => (
 										<button
+											key={device.uuid}
 											className="w-full text-left hover:bg-gray-100"
 											onClick={(e) => {
 												setNewDeviceName(device.device_name);
