@@ -19,14 +19,15 @@ yarn dev # or yarn build if you want a production build
 
 ## Supported devices
 
-After a recent update (https://github.com/rainloreley/lyra/commit/b85aac6f1bc037f4d964e6d7c4c92d7e702905b3) it's now possible to add custom device config files in Lyras' app data folder:
+After a recent update ([b85aac6](https://github.com/rainloreley/lyra/commit/b85aac6f1bc037f4d964e6d7c4c92d7e702905b3)) it's now possible to add custom device config files in Lyras' app data folder:
 
-```
-macOS: /Users/username/Library/Application Support/lyra/devices
-Windows: C:\Users\username\AppData\Roaming\lyra\devices
-Linux: /home/username/.lyra/devices
-```
-Documentation for these `.ldf` files will be added later. Click on one of the devices below to download its `.ldf` file
+|  OS     | Path                                                       |
+| ------- | ---------------------------------------------------------- |
+| macOS   | `/Users/username/Library/Application Support/lyra/devices` |
+| Windows | `C:\Users\username\AppData\Roaming\lyra\devices`           |
+| Linux   | `/home/username/.lyra/devices`                             |
+
+A documentation for these `.ldf` files will be added later. Click on one of the devices below to download its `.ldf` file
 
 - (Stairville MH-X50+ LED Spot) currently unavailable
 - [Stairville LED Flood TRI Panel 7x3W RGB](https://dl.abmgrt.dev/lyra/device_configs/Stairville_LEDFloodTRIPanel7x3WRGB.ldf)
