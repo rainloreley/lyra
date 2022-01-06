@@ -1,8 +1,8 @@
 {
 	"private": true,
 	"name": "Lyra",
-	"description": "DMX control software",
-	"version": "1.0.0",
+	"description": "DMX light control software",
+	"version": "0.9.0b1",
 	"author": "Loreley <mail@lory.dev>",
 	"main": "app/background.js",
 	"scripts": {

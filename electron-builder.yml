@@ -14,8 +14,6 @@ fileAssociations:
   - ext: lyra
     name: Lyra Light File
     role: Editor
-    perMachine: true
   - ext: ldf
     name: Lyra Device Config File
     role: Editor
-    perMachine: true
