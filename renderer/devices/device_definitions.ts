@@ -3,6 +3,7 @@ interface DeviceDefinition {
 	device_name: string;
 	author: string;
 	manual: string;
+	image?: string;
 	uuid: string;
 	modes: DeviceDefinitionMode[];
 }
@@ -110,7 +111,7 @@ export type {
 	DDMUICCSliderSettings,
 	DDMUICCDropdownOption,
 	DDMUICCButtonSettings,
-	DDMUICCColorPickerSettings
+	DDMUICCColorPickerSettings,
 };
 
 export {

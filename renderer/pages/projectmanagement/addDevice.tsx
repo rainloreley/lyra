@@ -38,9 +38,7 @@ const AddDevicePage: NextPage = () => {
 		if (!router.isReady) return;
 		setSkipAllowed(router.query.skipAllowed === 'true');
 		setHideBackButton(router.query.hideBackButton === 'true');
-		if (
-			projectManager.currentProject === undefined
-		) {
+		if (projectManager.currentProject === undefined) {
 			router.push(`/?returnto=${router.pathname}`);
 			return;
 		}
@@ -206,9 +204,8 @@ const AddDevicePage: NextPage = () => {
 					e.currentProject?.devices.push(newDMXProjectDevice);
 					saveProject(e.currentProject);
 					return e;
-				})
+				});
 			}
-
 
 			resolve('');
 		});
@@ -248,7 +245,9 @@ const AddDevicePage: NextPage = () => {
 					)}
 					<h1 className="text-white text-3xl font-bold">Add Device</h1>
 				</div>
-				<div className={`flex flex-col h-full justify-between overflow-y-scroll mb-2 ${styles.noscrollbar}`}>
+				<div
+					className={`flex flex-col h-full justify-between overflow-y-scroll mb-2 ${styles.noscrollbar}`}
+				>
 					<div className="mx-8">
 						<h2 className="text-white text-lg">Device List</h2>
 						<div className="bg-gray-300 p-2 w-full rounded-lg flex flex-col items-center shadow-xl">
@@ -317,11 +316,10 @@ const AddDevicePage: NextPage = () => {
 									New Device
 								</h2>
 								<div className="m-1">
-									<p className="text-gray-200 text-sm">
-										{selectedNewDeviceDefinition!.vendor}
-									</p>
+									<p className="text-white">Name:</p>
 									<input
 										className="bg-gray-200 rounded p-1 border border-gray-300 mt-1"
+										placeholder="New Device"
 										value={newDeviceName}
 										onChange={(e) => {
 											setNewDeviceName(e.target.value);
