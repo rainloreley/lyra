@@ -219,14 +219,14 @@ const AddDevicePage: NextPage = () => {
 				<div className="m-8">
 					{!hideBackButton ? (
 						<button
-							className="dark:bg-gray-400 bg-gray-300 rounded-full w-6 h-6"
+							className="dark:bg-gray-400 bg-gray-300 rounded-full w-5 h-5"
 							onClick={() => {
 								router.back();
 							}}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								className="h-5 w-6 flex-no-shrink fill-current"
+								className="h-4 w-5 flex-no-shrink fill-current"
 								width="24"
 								height="24"
 								viewBox="0 0 24 24"
@@ -516,8 +516,8 @@ const AddDevicePage: NextPage = () => {
 				<div className={`${styles.patchgrid} ${styles.noscrollbar}`}>
 					{patchMap.map((channel, index) => (
 						<div
-							className={`w-20 border bg-gray-200 border-gray-300 dark:border-gray-600 dark:bg-gray-700 flex flex-col items-center ${
-								channel.devices.length === 0 ? 'h-20' : ''
+							className={`w-20 border bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 flex flex-col items-center h-auto ${
+								channel.devices.length === 0 ? 'pb-8' : ''
 							}`}
 						>
 							<p className="text-xs dark:text-white font-bold mt-1">

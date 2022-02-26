@@ -146,7 +146,7 @@ const Dashboard: NextPage = () => {
 
 											// check if command key is pressed
 											if (clickEvent.metaKey) {
-												// if so, add selected device to list of all selecte devices
+												// if so, add selected device to list of all selected devices
 												if (selectedDevices.length > 0 &&
 													((selectedDevices[0].device as DeviceDefinition).uuid !== (e.device as DeviceDefinition).uuid || e.mode !== selectedDevices[0].mode)) {
 													return;
@@ -195,8 +195,10 @@ const Dashboard: NextPage = () => {
 						) : (
 							<div className={'h-full w-full items-center justify-center flex'}>
 								<div className={'flex flex-col items-center text-center'}>
-									<p>no devices :(</p>
-									<p>Try adding one!</p>
+									<h1 className={"text-lg"}>No devices</h1>
+									<button className={"underline text-blue-500"} onClick={() => {
+										router.push("/projectmanagement/addDevice")
+									}}>Try adding one!</button>
 								</div>
 							</div>
 						)}

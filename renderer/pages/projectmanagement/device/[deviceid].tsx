@@ -19,7 +19,8 @@ const DeviceConfigPage: NextPage = () => {
 		useState(1);
 	const [error, setError] = useState('');
 	const [savingDevice, setSavingDevice] = useState(false);
-	const { projectManager, setProjectManager, saveProject } = useContext(AppControlContext);
+	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+	const { projectManager, setProjectManager, saveProject, deleteDevice } = useContext(AppControlContext);
 
 	useEffect(() => {
 		if (!router.isReady) return;
@@ -174,6 +175,19 @@ const DeviceConfigPage: NextPage = () => {
 									Save device
 								</button>
 							)}
+						</div>
+						<div className={"mt-6"}>
+							<button className={`p-2 px-4 ${showDeleteConfirmation ? "bg-red-800" : "bg-red-500"} rounded-xl text-white`} onClick={() => {
+								if (!showDeleteConfirmation) {
+									setShowDeleteConfirmation(true)
+								}
+								else {
+									deleteDevice(deviceId)
+									router.push("/")
+								}
+							}}>
+								{showDeleteConfirmation ? "Click again to confirm" : "Delete"}
+							</button>
 						</div>
 					</div>
 				</div>

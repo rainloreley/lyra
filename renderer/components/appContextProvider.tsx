@@ -16,6 +16,7 @@ type AppControlHandlerProps = {
 	sendDMXMap: (map: DMXMapElement[]) => void;
 	saveProject:  (_project: DMXProject) => void;
 	setOverlayView: Dispatch<SetStateAction<ReactElement>>;
+	deleteDevice: (_deviceid: string) => void;
 
 };
 
@@ -150,6 +151,24 @@ const AppControlProvider = ({ children }) => {
 
 	}
 
+	function deleteDevice(_deviceid: string) {
+		const deviceIndex = projectManager.currentProject.devices.findIndex((e) => e.id === _deviceid);
+		if (deviceIndex > -1) {
+			projectManager.currentProject.devices.splice(deviceIndex, 1);
+		}
+		for (var scenegroup of projectManager.currentProject.scene_groups) {
+			for (var scene of scenegroup.scenes) {
+				const sceneDeviceIndex = scene.device_states.findIndex((e) => e.device_id === _deviceid);
+				if (sceneDeviceIndex > -1) {
+					scene.device_states.splice(sceneDeviceIndex, 1);
+				}
+			}
+		}
+
+		saveProject(projectManager.currentProject)
+
+	}
+
 	function saveProject(_project: DMXProject) {
 		const notificationElement: NotificationCenterElement = {
 			uid: uuidv4(),
@@ -204,7 +223,8 @@ const AppControlProvider = ({ children }) => {
 		sendDMXCommand: sendDMXCommand,
 		sendDMXMap: sendDMXMap,
 		saveProject: saveProject,
-		setOverlayView: setOverlayView
+		setOverlayView: setOverlayView,
+		deleteDevice: deleteDevice
 	}
 
 	return (
