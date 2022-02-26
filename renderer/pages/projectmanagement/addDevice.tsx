@@ -168,6 +168,8 @@ const AddDevicePage: NextPage = () => {
 				return;
 			}
 
+			var newDMXDevices: DMXProjectDevice[] = [];
+
 			// loop through all devices
 			for (var i = 0; i < parseInt(newDeviceCount); i++) {
 				const starting_channel =
@@ -200,12 +202,14 @@ const AddDevicePage: NextPage = () => {
 					mode: newDeviceDMXMode,
 					channel_state: channel_state,
 				};
-				setProjectManager((e) => {
-					e.currentProject?.devices.push(newDMXProjectDevice);
-					saveProject(e.currentProject);
-					return e;
-				});
+				newDMXDevices.push(newDMXProjectDevice)
 			}
+
+			setProjectManager((e) => {
+				e.currentProject.devices = e.currentProject?.devices.concat(newDMXDevices)
+				saveProject(e.currentProject);
+				return e;
+			});
 
 			resolve('');
 		});

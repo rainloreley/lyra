@@ -171,7 +171,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                         {availableInterfaces.length > 0 ? (
                             <ul>
                                 {availableInterfaces.map((_interface) => (
-                                    <button className={`bg-gray-200 dark:bg-gray-800 rounded-lg text-left p-2 ${selectedInterface?.id === _interface.id}`} onClick={() => {
+                                    <button key={_interface.id} className={`bg-gray-200 dark:bg-gray-800 rounded-lg text-left p-2 ${selectedInterface?.id === _interface.id}`} onClick={() => {
                                         switchSelectedInterface(_interface.id)
                                     }}>
                                         <div className={"flex"}>

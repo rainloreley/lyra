@@ -115,7 +115,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
     }
 
     return (
-        <div className={" top-4 bottom-4 right-4 absolute"}>
+        <div className={"top-4 bottom-4 right-4 absolute"}>
             <div className={"dark:bg-gray-800 bg-gray-200 h-full p-4 shadow-2xl rounded-2xl flex flex-col w-80"}>
                 <div className={"flex justify-between items-center mb-2"}>
                     <h1 className={"font-bold text-xl dark:text-white"}>Scenes</h1>
@@ -141,7 +141,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
                     {scenes.length > 0 ? (
                         <ul>
                             {scenes.map((scene, index) => (
-                                <div className={`p-4 flex justify-between ${index !== scenes.length - 1 ? "border-b border-gray-400" : ""}`}>
+                                <div key={scene.id} className={`p-4 flex justify-between ${index !== scenes.length - 1 ? "border-b border-gray-400" : ""}`}>
                                     <div>
                                         <h3 className={"text-md font-semibold"}>{scene.name}</h3>
                                         <p className={"text-sm text-gray-400"}>Fade: {moment(scene.fadein_time).format("ss.SS")}s</p>

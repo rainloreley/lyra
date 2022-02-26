@@ -1,6 +1,6 @@
 .devicegrid {
     /*@apply flex h-full w-full justify-center;*/
-    @apply flex flex-wrap w-full h-full;
+    @apply flex flex-wrap w-full h-full overflow-y-scroll;
     /*width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
@@ -8,4 +8,12 @@
     grid-row-gap: 1em;
     overflow-y: scroll;
     height: 100%;*/
+}
+.devicegrid::-webkit-scrollbar {
+    display: none;
+}
+
+.devicegrid {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

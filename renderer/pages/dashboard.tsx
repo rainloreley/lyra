@@ -140,7 +140,7 @@ const Dashboard: NextPage = () => {
 								{projectManager.currentProject?.devices.map((e) => (
 									<button
 										key={e.start_channel}
-										className={`dark:text-white justify-self-center self-center m-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-2xl ${selectedDevices.filter((_filter) => _filter.id === e.id).length > 0 ? "border border-yellow-300" : ""}`}
+										className={`dark:text-white justify-self-center self-center p-2 m-2 w-40 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-2xl ${selectedDevices.filter((_filter) => _filter.id === e.id).length > 0 ? "border border-yellow-300" : ""}`}
 										onClick={(clickEvent) => {
 											console.log(clickEvent.metaKey);
 
@@ -167,7 +167,12 @@ const Dashboard: NextPage = () => {
 											}
 											else {
 												// if not, make the selected device the only one
-												setSelectedDevices([e]);
+												if (selectedDevices.length === 1 && selectedDevices[0].id === e.id) {
+													setSelectedDevices([])
+												}
+												else {
+													setSelectedDevices([e]);
+												}
 											}
 										}}
 									>

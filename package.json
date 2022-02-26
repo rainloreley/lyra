@@ -8,6 +8,7 @@
 	"scripts": {
 		"dev": "nextron",
 		"build": "nextron build",
+		"rebuild": "npm rebuild",
 		"postinstall": "electron-builder install-app-deps && electron-rebuild",
 		"build:all": "nextron build --all",
 		"build:win32": "nextron build --win --ia32",
@@ -52,7 +53,7 @@
 		"electron": "^15.0.0",
 		"electron-builder": "^22.11.7",
 		"electron-rebuild": "^3.2.5",
-		"next": "^11.1.2",
+		"next": "^12.1.0",
 		"nextron": "^7.1.0",
 		"postcss": "^8.3.7",
 		"react": "^17.0.2",
