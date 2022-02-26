@@ -41,19 +41,19 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
         setGroups(projectManager.currentProject.scene_groups);
     }, []);
 
-    const deviceChannelChecked = (deviceid: string, channel: number, value: number) => {
+    const deviceChannelChecked = async (deviceid: string, channel: number, value: number) => {
         const deviceById = devices.find((e) => e.id === deviceid);
         if (deviceById) {
             const existingElement = channelData.findIndex((e) => e.channel === deviceById.start_channel + channel - 1)
             if (existingElement > -1) {
-                setChannelData((e) => {
+                await setChannelData((e) => {
                     e[existingElement].value = value;
                     return e;
                 })
             }
             else {
 
-                setChannelData((e) => {
+                await setChannelData((e) => {
                     e.push({
                         device_id: deviceid,
                         channel: deviceById.start_channel + channel - 1,
@@ -73,11 +73,11 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
         })*/
     }
 
-    const deviceChannelUnchecked = (deviceid: string, channels: number[]) => {
+    const deviceChannelUnchecked = async (deviceid: string, channels: number[]) => {
 
         const deviceById = devices.find((e) => e.id === deviceid);
         if (deviceById) {
-            setChannelData((e) => {
+            await setChannelData((e) => {
                 const copy = [...e];
                 for (var channel of channels) {
                     const elementIndex = copy.findIndex((item) => item.channel === deviceById.start_channel + channel - 1);
@@ -90,12 +90,12 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
         }
     }
 
-    const deviceChannelValueChanged = (deviceid: string, channel: number, value: number) => {
+    const deviceChannelValueChanged = async (deviceid: string, channel: number, value: number) => {
         const deviceById = devices.find((e) => e.id === deviceid);
         if (deviceById) {
             const elementIndex = channelData.findIndex((e) => e.channel === deviceById.start_channel + channel - 1)
             if (elementIndex > -1) {
-                setChannelData((e) => {
+                await setChannelData((e) => {
                     e[elementIndex].value = value;
                     return e;
                 })
@@ -198,7 +198,13 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                 <h2 className={"mt-4 font-semibold mb-1"}>Devices</h2>
                 <ul className={`p-2 rounded-lg border border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-700 overflow-y-scroll block ${styles.noscrollbar}`} style={{listStylePosition: "inside"}}>
                     {devices.map((device) => (
-                        <NewSceneOverlayDeviceCell key={device.id} device={device} onCheckEnable={deviceChannelChecked} onCheckDisable={deviceChannelUnchecked} onValueChange={deviceChannelValueChanged} />
+                        <NewSceneOverlayDeviceCell key={device.id} device={device} onCheckEnable={async (d, c, v) => {
+                            await deviceChannelChecked(d, c, v);
+                        }} onCheckDisable={async (d, c) => {
+                            await deviceChannelUnchecked(d, c);
+                        }} onValueChange={async (d, c, v) => {
+                            await deviceChannelValueChanged(d, c, v);
+                        }} />
                     ))}
                 </ul>
 
@@ -267,6 +273,7 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
 
         for (var channel of _channels) {
             if (channel.checked) {
+                console.log( channels.find((e) => e.channel === channel.channel));
                 onCheckEnable(device.id, channel.channel, channels.find((e) => e.channel === channel.channel).value)
             }
             else {
@@ -281,7 +288,7 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
                 channel: e.channel,
                 name: e.name,
                 value: device.channel_state.find((f) => f.channel === e.channel).value,
-                checked: true
+                checked: false
             }
             return obj;
         }))
@@ -346,7 +353,6 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
                             var channelsCopy = [... channels];
                             channelsCopy.find((e) => e.channel === channel.channel).checked = checkState;
                             updateGlobalCheckmark(channelsCopy)
-
                             if (checkState === true) {
                                 onCheckEnable(device.id, channel.channel, channels.find((e) => e.channel === channel.channel).value)
                             }

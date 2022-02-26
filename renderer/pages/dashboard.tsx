@@ -15,8 +15,8 @@ import { store } from 'next/dist/build/output/store';
 import SceneList from '../components/dashboard/SceneList';
 const Dashboard: NextPage = () => {
 	const router = useRouter();
-	const [selectedDevice, setSelectedDevice] = useState<DMXProjectDevice | null>(
-		null
+	const [selectedDevices, setSelectedDevices] = useState<DMXProjectDevice[] | null>(
+		[]
 	);
 
 	const [showSceneList, setShowSceneList] = useState<boolean>(false);
@@ -24,6 +24,9 @@ const Dashboard: NextPage = () => {
 	const { projectManager } = useContext(AppControlContext);
 
 	useEffect(() => {
+		if (!projectManager.currentProject) {
+			router.push("/")
+		}
 		enableStoredInterface();
 	}, []);
 
@@ -97,33 +100,36 @@ const Dashboard: NextPage = () => {
 					<div
 						className={'flex justify-between w-full px-3 items-center h-full'}
 					>
-						<div className={'flex'}>
-							<button
-								className={'h-6 w-6'}
-								onClick={() => {
-									setShowSceneList(true);
-								}}
-							>
-								<List />
-							</button>
-						</div>
-						<div className={'flex'}>
-							<button
-								className={'h-6 w-6'}
-								onClick={() => {
-									router.push('/settings');
-								}}
-							>
-								<Settings />
-							</button>
+						<div />
+						<div className={"flex"}>
+							<div className={'flex mx-1'}>
+								<button
+									className={'h-6 w-6'}
+									onClick={() => {
+										setShowSceneList(true);
+									}}
+								>
+									<List />
+								</button>
+							</div>
+							<div className={'flex mx-1'}>
+								<button
+									className={'h-6 w-6'}
+									onClick={() => {
+										router.push('/settings');
+									}}
+								>
+									<Settings />
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div id="canvas" className="flex flex-row w-full h-full relative">
-					{selectedDevice != null ? (
+				<div id="canvas" className="flex flex-row w-full h-full relative overflow-y-hidden">
+					{selectedDevices.length > 0 ? (
 						<DashboardSidebar
-							selectedDevice={selectedDevice}
-							setSelectedDevice={setSelectedDevice}
+							selectedDevices={selectedDevices}
+							setSelectedDevices={setSelectedDevices}
 						/>
 					) : (
 						<div></div>
@@ -134,9 +140,35 @@ const Dashboard: NextPage = () => {
 								{projectManager.currentProject?.devices.map((e) => (
 									<button
 										key={e.start_channel}
-										className="dark:text-white justify-self-center self-center m-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-2xl"
-										onClick={() => {
-											setSelectedDevice(e);
+										className={`dark:text-white justify-self-center self-center m-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-2xl ${selectedDevices.filter((_filter) => _filter.id === e.id).length > 0 ? "border border-yellow-300" : ""}`}
+										onClick={(clickEvent) => {
+											console.log(clickEvent.metaKey);
+
+											// check if command key is pressed
+											if (clickEvent.metaKey) {
+												// if so, add selected device to list of all selecte devices
+												if (selectedDevices.length > 0 &&
+													((selectedDevices[0].device as DeviceDefinition).uuid !== (e.device as DeviceDefinition).uuid || e.mode !== selectedDevices[0].mode)) {
+													return;
+												}
+												const existingIndex = selectedDevices.findIndex((device => device.id === e.id))
+												if (existingIndex > -1) {
+													setSelectedDevices((devices) => {
+														devices.splice(existingIndex, 1);
+														return devices;
+													})
+												}
+												else {
+													setSelectedDevices((devices) => {
+														devices.push(e);
+														return devices;
+													})
+												}
+											}
+											else {
+												// if not, make the selected device the only one
+												setSelectedDevices([e]);
+											}
 										}}
 									>
 										<div>
@@ -155,7 +187,7 @@ const Dashboard: NextPage = () => {
 											) : (
 												<div />
 											)}
-											<p className="font-bold text-lg">{e.name}</p>
+											<p className="font-bold text-md">{e.name}</p>
 										</div>
 									</button>
 								))}

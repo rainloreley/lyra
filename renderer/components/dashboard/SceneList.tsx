@@ -183,7 +183,7 @@ interface GroupButtonElement_Props {
 
 const GroupButtonElement: FunctionComponent<GroupButtonElement_Props> = ({name, color, isSelected, onSelect}) => {
     return (
-        <button className={`p-1 px-2 text-sm m-1 border ${isSelected ? "border-yellow-500 dark:border-yellow-300" : "border-gray-400 dark:border-gray-500"} rounded-full`} onClick={() => onSelect()}>
+        <button className={`p-1 px-2 text-xs m-1 border ${isSelected ? "border-yellow-500 dark:border-yellow-300" : "border-gray-400 dark:border-gray-500"} rounded-full`} onClick={() => onSelect()}>
             <div className={"flex items-center"}>
                 <div style={{backgroundColor: color}} className={`rounded-full w-4 h-4 mr-1`} />
                 <p>{name}</p>

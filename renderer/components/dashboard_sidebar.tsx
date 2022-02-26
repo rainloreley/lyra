@@ -26,56 +26,64 @@ import CloseButton from './small/close_button';
 import DeviceColorPicker from './device_components/colorpicker';
 
 interface Dashboard_Sidebar {
-	selectedDevice: DMXProjectDevice;
-	setSelectedDevice: (device: DMXProjectDevice | null) => void;
+	selectedDevices: DMXProjectDevice[];
+	setSelectedDevices: (device: DMXProjectDevice[] | null) => void;
 }
 
 const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
-	selectedDevice,
-	setSelectedDevice,
+	selectedDevices,
+	setSelectedDevices,
 }) => {
 	const router = useRouter();
 
 	const { projectManager, sendDMXCommand } = useContext(AppControlContext);
 
+	const _sendDMXForAllDevices = (channel: number, value: number) => {
+		for (var device of selectedDevices) {
+			sendDMXCommand(device.start_channel, channel, value);
+		}
+	}
+
 	return (
-		<div className="pb-4 left-4 absolute bottom-4 top-4 flex">
+		<div className="pb-4 my-2 mx-2 flex">
 			<div className="dark:bg-gray-800 bg-gray-200 p-4 shadow-2xl rounded-2xl flex flex-col w-80 bottom-4">
 				<div className="flex justify-between items-center">
 					<div className="flex mr-2">
-						<h1 className="font-bold dark:text-white text-xl">
-							{selectedDevice.name}
+						<h1 className="font-bold dark:text-white text-lg">
+							{selectedDevices.length === 1 ? selectedDevices[0].name : "Multiple devices"}
 						</h1>
-						<button
-							className="w-4 ml-2 flex"
-							onClick={(e) => {
-								router.push(`/projectmanagement/device/${selectedDevice.id}`);
-							}}
-						>
-							<SettingsIcon />
-						</button>
+						{selectedDevices.length === 1 ? (
+							<button
+								className="w-4 ml-2 flex"
+								onClick={(e) => {
+									router.push(`/projectmanagement/device/${selectedDevices[0].id}`);
+								}}
+							>
+								<SettingsIcon />
+							</button>
+						) : <div />}
 					</div>
 
-					<CloseButton buttonPressed={() => setSelectedDevice(null)} size={5} />
+					<CloseButton buttonPressed={() => setSelectedDevices([])} size={5} />
 				</div>
-				<p className="dark:text-gray-400 text-gray-500 text-sm ">
-					{(selectedDevice.device as DeviceDefinition).device_name}
+				<p className="dark:text-gray-400 text-gray-500 text-xs">
+					{(selectedDevices[0].device as DeviceDefinition).device_name}
 				</p>
 				<p className="dark:text-gray-400 text-gray-500 text-sm mb-2">
 					{
-						(selectedDevice.device as DeviceDefinition).modes.filter(
-							(e: any) => e.id == selectedDevice.mode
+						(selectedDevices[0].device as DeviceDefinition).modes.filter(
+							(e: any) => e.id == selectedDevices[0].mode
 						)[0].name
 					}{' '}
-					|| Channel {selectedDevice.start_channel}
+					{selectedDevices.length === 1 ? `|| Channel ${selectedDevices[0].start_channel}` : ""}
 				</p>
 
 				<ul className={`overflow-y-scroll ${styles.noscrollbar} h-full`}>
-					{(selectedDevice.device as DeviceDefinition).modes
-						.filter((e: any) => e.id == selectedDevice.mode)[0]
+					{(selectedDevices[0].device as DeviceDefinition).modes
+						.filter((e: any) => e.id == selectedDevices[0].mode)[0]
 						.ui_channels.map((channel: DeviceDefinitionModeUIChannel) => (
 							<div key={channel.channel} className="mt-2">
-								<h2 className="text-lg font-semibold">{channel.name}</h2>
+								<h2 className="text-md font-semibold">{channel.name}</h2>
 								<div className="mt-2">
 									{
 										// @ts-ignore
@@ -84,17 +92,20 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 												<DeviceDropdown
 													options={channel.config.dropdown_options}
 													valueupdate={(value: number) => {
-														sendDMXCommand(
+														_sendDMXForAllDevices(parseInt(channel.channel), value);
+														/*sendDMXCommand(
 															selectedDevice.start_channel,
 															parseInt(channel.channel),
 															value
-														);
+														);*/
 													}}
 													state={
-														selectedDevice.channel_state.filter(
+														arrayNumberAverage(selectedDevices.map((device) => device.channel_state.filter((e: DMXProjectDeviceChannelState) =>
+															e.channel == parseInt(channel.channel))[0].value))
+														/*selectedDevice.channel_state.filter(
 															(e: DMXProjectDeviceChannelState) =>
 																e.channel == parseInt(channel.channel)
-														)[0].value
+														)[0].value*/
 													}
 												/>
 											),
@@ -103,17 +114,20 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 												<DeviceSlider
 													slider_settings={channel.config.slider_settings!}
 													valueupdate={(value: number) => {
-														sendDMXCommand(
+														_sendDMXForAllDevices(parseInt(channel.channel), value);
+														/*sendDMXCommand(
 															selectedDevice.start_channel,
 															parseInt(channel.channel),
 															value
-														);
+														);*/
 													}}
 													state={
-														selectedDevice.channel_state.filter(
+														arrayNumberAverage(selectedDevices.map((device) => device.channel_state.filter((e: DMXProjectDeviceChannelState) =>
+															e.channel == parseInt(channel.channel))[0].value))
+														/*selectedDevice.channel_state.filter(
 															(e: DMXProjectDeviceChannelState) =>
 																e.channel == parseInt(channel.channel)
-														)[0].value
+														)[0].value*/
 													}
 												/>
 											),
@@ -121,17 +135,20 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 												<DeviceColorWheel
 													subsets={channel.config.colorwheel_subsets!}
 													valueupdate={(value: number) => {
-														sendDMXCommand(
+														_sendDMXForAllDevices(parseInt(channel.channel), value);
+														/*sendDMXCommand(
 															selectedDevice.start_channel,
 															parseInt(channel.channel),
 															value
-														);
+														);*/
 													}}
 													state={
-														selectedDevice.channel_state.filter(
+														arrayNumberAverage(selectedDevices.map((device) => device.channel_state.filter((e: DMXProjectDeviceChannelState) =>
+															e.channel == parseInt(channel.channel))[0].value))
+														/*selectedDevice.channel_state.filter(
 															(e: DMXProjectDeviceChannelState) =>
 																e.channel == parseInt(channel.channel)
-														)[0].value
+														)[0].value*/
 													}
 												/>
 											),
@@ -147,24 +164,29 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 															const dmxChannelY: number =
 																channel.config.joystick_axis!.y;
 
-															sendDMXCommand(
+															/*sendDMXCommand(
 																selectedDevice.start_channel,
 																axis == Device_Joystick_Axis.X
 																	? dmxChannelX
 																	: dmxChannelY,
 																value
-															);
+															);*/
+
+															_sendDMXForAllDevices(axis == Device_Joystick_Axis.X
+																? dmxChannelX
+																: dmxChannelY, value);
 														}}
-														state={selectedDevice.channel_state}
+														state={selectedDevices[0].channel_state}
 														axis={channel.config.joystick_axis!}
 													/>
 												</div>
 											),
-											button: (
+											/*button: (
 												<DeviceButton
 													button_settings={channel.config.button_settings!}
 													valueupdate={(value: number) => {
-														sendDMXCommand(
+														_sendDMXForAllDevices(parseInt(channel.channel), value);
+														/*sendDMXCommand(
 															selectedDevice.start_channel,
 															parseInt(channel.channel),
 															value
@@ -200,7 +222,7 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 														}
 													}}
 												/>
-											),
+											),*/
 											colorpicker: (
 												<DeviceColorPicker
 													valueupdate={(
@@ -208,7 +230,11 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 														green: number,
 														blue: number
 													) => {
-														sendDMXCommand(
+														_sendDMXForAllDevices(channel.config.colorpicker_settings!.channel_red, red);
+														_sendDMXForAllDevices(channel.config.colorpicker_settings!
+															.channel_green, green);
+														_sendDMXForAllDevices(channel.config.colorpicker_settings!.channel_blue, blue);
+														/*sendDMXCommand(
 															selectedDevice.start_channel,
 															channel.config.colorpicker_settings!.channel_red,
 															red
@@ -223,9 +249,9 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 															selectedDevice.start_channel,
 															channel.config.colorpicker_settings!.channel_blue,
 															blue
-														);
+														);*/
 													}}
-													state={selectedDevice.channel_state}
+													state={selectedDevices[0].channel_state}
 													channels={channel.config.colorpicker_settings!}
 												/>
 											),
@@ -239,5 +265,5 @@ const DashboardSidebar: FunctionComponent<Dashboard_Sidebar> = ({
 		</div>
 	);
 };
-
+const arrayNumberAverage = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
 export default DashboardSidebar;
