@@ -5,7 +5,7 @@ interface _CloseButtonProps {
     size: number;
 }
 
-const CloseButton: FunctionComponent<_CloseButtonProps> = ({ buttonPressed, size }) => {
+const CloseButton: FunctionComponent<_CloseButtonProps> = ({buttonPressed, size}) => {
     return (
         <button
             className={`dark:bg-gray-400 bg-gray-300 rounded-full w-${size} h-${size}`}

@@ -1,4 +1,4 @@
-import { Server} from "socket.io";
+import {Server} from "socket.io";
 import HID from "node-hid";
 import express from "express";
 import cors from "cors";
@@ -43,28 +43,25 @@ class FX5IntServer {
                 }
             }
             return interfaces;
-        }
-        catch(err) {
+        } catch (err) {
             return [];
         }
     }
 
     openLink(path: string): boolean {
-       try {
-           this.openInterface = new HID.HID(path);
-           return true;
-       }
-       catch {
-           return false;
-       }
+        try {
+            this.openInterface = new HID.HID(path);
+            return true;
+        } catch {
+            return false;
+        }
     }
 
     setDMXMode(mode: number): boolean {
         try {
             if (!this.openInterface) {
                 return false;
-            }
-            else {
+            } else {
                 var buffer = Array(35).fill(0);
                 // report ID
                 buffer[0] = 0;
@@ -75,14 +72,12 @@ class FX5IntServer {
                 var res = this.openInterface.write(buffer);
                 if (res === 0) {
                     return false;
-                }
-                else {
+                } else {
                     // success :D
                     return true;
                 }
             }
-        }
-        catch {
+        } catch {
             return false;
         }
     }
@@ -101,12 +96,10 @@ class FX5IntServer {
                 }
                 const res = this.openInterface.write(buffer);
             }
-        }
-        catch {
+        } catch {
 
         }
     }
-
 
 
     start() {
@@ -148,8 +141,7 @@ class FX5IntServer {
             this.setDMXMode(0);
             try {
                 this.openInterface.close();
-            }
-            catch(err) {
+            } catch (err) {
             }
         }
     }
@@ -160,21 +152,20 @@ class FX5IntServer {
 
     _httpFindInterfacesHandler(req, res) {
         const availableInterfaces = this.findInterfaces();
-        res.status(200).json({ interfaces: availableInterfaces})
+        res.status(200).json({interfaces: availableInterfaces})
     }
 
     _httpOpenLinkInterfacesHandler(req, res) {
-        const { path } = req.body;
+        const {path} = req.body;
         if (typeof path !== "string") {
-            return res.status(400).json({ err: "badRequest" })
+            return res.status(400).json({err: "badRequest"})
         }
         const openRes = this.openLink(path);
         if (openRes) {
             res.status(200).json({})
             return;
-        }
-        else {
-            res.status(500).json({ err: "operationFailed" })
+        } else {
+            res.status(500).json({err: "operationFailed"})
         }
 
     }
@@ -184,31 +175,25 @@ class FX5IntServer {
         try {
             this.openInterface.close();
             res.status(200).json({})
-        }
-        catch(err) {
+        } catch (err) {
             res.status(500).json({err: err})
         }
 
     }
 
     _httpSetDMXModeHandler(req, res) {
-        const { mode } = req.body;
+        const {mode} = req.body;
         if (typeof mode !== "number") {
-            return res.status(400).json({ err: "badRequest" });
+            return res.status(400).json({err: "badRequest"});
 
         }
         const modeRes = this.setDMXMode(mode);
         if (modeRes) {
             res.status(200).json({});
-        }
-        else {
-            res.status(500).json({ err: "operationFailed" })
+        } else {
+            res.status(500).json({err: "operationFailed"})
         }
     }
-
-
-
-
 
 
 }

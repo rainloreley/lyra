@@ -12,9 +12,6 @@ class FX5Interface extends DMXInterface {
     public static FX5_HTTP_SERVER_PORT = 3018;
     public static FX5_WS_SERVER_PORT = 3019;
 
-
-
-
     socket: Socket;
     id: string;
     dmxMode: number;
@@ -40,8 +37,7 @@ class FX5Interface extends DMXInterface {
             axios.get(`http://127.0.0.1:${FX5Interface.FX5_HTTP_SERVER_PORT}/`).then((result) => {
                 if (result.data.status === "alive") {
                     resolve(true);
-                }
-                else {
+                } else {
                     resolve(false);
                 }
             }).catch((_) => {

@@ -1,17 +1,15 @@
-import { ipcMain } from 'electron';
-import fs from 'fs';
 import DMXProject from "./structs/DMXProject";
 import DMXInterface from "./Interface/DMXInterface";
 
 class ProjectManager {
 
-	projectFilePath?: string;
-	currentProject?: DMXProject;
-	interface?: DMXInterface;
+    projectFilePath?: string;
+    currentProject?: DMXProject;
+    interface?: DMXInterface;
 
-	constructor() {
-		this.currentProject = null;
-	}
+    constructor() {
+        this.currentProject = null;
+    }
 }
 
 export default ProjectManager;

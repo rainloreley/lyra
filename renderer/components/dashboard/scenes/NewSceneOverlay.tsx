@@ -9,7 +9,7 @@ import DMXProjectSceneGroup from "../../../backend/structs/DMXProjectSceneGroup"
 import CloseButton from "../../small/close_button";
 import LoadingSpinner from "../../loadingSpinner";
 import DMXProjectScene from "../../../backend/structs/DMXProjectScene";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import DMX_DeviceStateSnapshot, {DMX_DeviceStateSnapshotChannelValue} from "../../../backend/structs/DMX_DeviceStateSnapshot";
 
 interface ChannelElement {
@@ -20,9 +20,9 @@ interface ChannelElement {
 
 const NewSceneOverlay: FunctionComponent = ({}) => {
 
-    const [ sceneName, setSceneName ] = useState<string>("");
-    const [ sceneNameModified, setSceneNameModified ] = useState<boolean>(false);
-    const [ devices, setDevices ] = useState<DMXProjectDevice[]>([]);
+    const [sceneName, setSceneName] = useState<string>("");
+    const [sceneNameModified, setSceneNameModified] = useState<boolean>(false);
+    const [devices, setDevices] = useState<DMXProjectDevice[]>([]);
     const [groups, setGroups] = useState<DMXProjectSceneGroup[]>(
         []
     )
@@ -30,7 +30,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
 
     const [channelData, setChannelData] = useState<ChannelElement[]>([]);
 
-    const { projectManager, setOverlayView, setProjectManager, saveProject } = useContext(AppControlContext);
+    const {projectManager, setOverlayView, setProjectManager, saveProject} = useContext(AppControlContext);
 
     const [isSaving, setIsSaving] = useState(false);
 
@@ -50,8 +50,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                     e[existingElement].value = value;
                     return e;
                 })
-            }
-            else {
+            } else {
 
                 await setChannelData((e) => {
                     e.push({
@@ -173,30 +172,36 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
     }
 
     return (
-        <div className={"bg-gray-200 dark:bg-gray-800 shadow-2xl p-4 rounded-xl flex flex-col justify-between text-black dark:text-white"} style={{height: "80%", maxWidth: "60%"}}>
+        <div
+            className={"bg-gray-200 dark:bg-gray-800 shadow-2xl p-4 rounded-xl flex flex-col justify-between text-black dark:text-white"}
+            style={{height: "80%", maxWidth: "60%"}}>
             <div className={"flex flex-col"} style={{height: "90%"}}>
                 <div className={"mb-2"}>
                     <CloseButton buttonPressed={() => {
                         setOverlayView(null);
-                    }} size={5} />
+                    }} size={5}/>
                 </div>
                 <div>
-                    <input placeholder={"New Scene"} value={sceneName} className={`p-1 bg-gray-200 font-bold text-xl rounded-xl border border-gray-400 text-black dark:text-white dark:bg-gray-700 dark:border-gray-600 ${sceneName.replace(/\s/g, '') === "" && sceneNameModified ? "border-red-500 dark:border-red-500" : ""}`} onChange={(e) => {
-                        setSceneNameModified(true);
-                        setSceneName(e.target.value)
-                    }}/>
+                    <input placeholder={"New Scene"} value={sceneName}
+                           className={`p-1 bg-gray-200 font-bold text-xl rounded-xl border border-gray-400 text-black dark:text-white dark:bg-gray-700 dark:border-gray-600 ${sceneName.replace(/\s/g, '') === "" && sceneNameModified ? "border-red-500 dark:border-red-500" : ""}`}
+                           onChange={(e) => {
+                               setSceneNameModified(true);
+                               setSceneName(e.target.value)
+                           }}/>
                 </div>
                 <div className={"mt-2"}>
                     <div className={"flex flex-wrap pb-1"}>
                         {groups.map((group) => (
-                            <GroupButtonElement key={group.id} name={group.name} color={group.color} isSelected={(selectedGroup?.id || "") === group.id} onSelect={() => {
+                            <GroupButtonElement key={group.id} name={group.name} color={group.color}
+                                                isSelected={(selectedGroup?.id || "") === group.id} onSelect={() => {
                                 setSelectedGroup(group)
-                            }} />
+                            }}/>
                         ))}
                     </div>
                 </div>
                 <h2 className={"mt-4 font-semibold mb-1"}>Devices</h2>
-                <ul className={`p-2 rounded-lg border border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-700 overflow-y-scroll block ${styles.noscrollbar}`} style={{listStylePosition: "inside"}}>
+                <ul className={`p-2 rounded-lg border border-gray-300 dark:border-gray-500 bg-gray-200 dark:bg-gray-700 overflow-y-scroll block ${styles.noscrollbar}`}
+                    style={{listStylePosition: "inside"}}>
                     {devices.map((device) => (
                         <NewSceneOverlayDeviceCell key={device.id} device={device} onCheckEnable={async (d, c, v) => {
                             await deviceChannelChecked(d, c, v);
@@ -204,7 +209,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                             await deviceChannelUnchecked(d, c);
                         }} onValueChange={async (d, c, v) => {
                             await deviceChannelValueChanged(d, c, v);
-                        }} />
+                        }}/>
                     ))}
                 </ul>
 
@@ -213,10 +218,11 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                 {
                     isSaving ? (
                         <div className={" m-2"}>
-                            <LoadingSpinner color={"#fff"} size={"30"} />
+                            <LoadingSpinner color={"#fff"} size={"30"}/>
                         </div>
                     ) : (
-                        <button className={"bg-blue-500 rounded-xl px-4 py-2 text-white"} onClick={saveScene}>Save</button>
+                        <button className={"bg-blue-500 rounded-xl px-4 py-2 text-white"}
+                                onClick={saveScene}>Save</button>
                     )
                 }
             </div>
@@ -226,8 +232,11 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
 
 interface NewSceneOverlayDeviceCell_Props {
     device: DMXProjectDevice;
+
     onCheckEnable(deviceid: string, channel: number, value: number);
+
     onCheckDisable(deviceid: string, channel: number[]);
+
     onValueChange(deviceid: string, channel: number, value: number);
 }
 
@@ -242,12 +251,17 @@ enum NewSceneOverlayDeviceCellGlobalCheckState {
     none, between, all
 }
 
-const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Props> = ({device, onCheckEnable, onCheckDisable, onValueChange}) => {
+const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Props> = ({
+                                                                                           device,
+                                                                                           onCheckEnable,
+                                                                                           onCheckDisable,
+                                                                                           onValueChange
+                                                                                       }) => {
 
-    const [ showChannels, setShowChannels ] = useState<boolean>(false)
-    const [ channels, setChannels ] = useState<NewSceneOverlayDeviceCellChannel[]>([]);
+    const [showChannels, setShowChannels] = useState<boolean>(false)
+    const [channels, setChannels] = useState<NewSceneOverlayDeviceCellChannel[]>([]);
 
-    const [ checkState, setCheckState ] = useState<NewSceneOverlayDeviceCellGlobalCheckState>(NewSceneOverlayDeviceCellGlobalCheckState.all);
+    const [checkState, setCheckState] = useState<NewSceneOverlayDeviceCellGlobalCheckState>(NewSceneOverlayDeviceCellGlobalCheckState.all);
 
 
     useEffect(() => {
@@ -255,7 +269,7 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
     }, [channels]);
 
     const updateGlobalCheckmark = (_channels = channels) => {
-        var channelsCopy = [... _channels];
+        var channelsCopy = [..._channels];
         //channelsCopy.find((e) => e.channel === channel.channel).checked = checkState;
 
         const checkedChannels = channelsCopy.filter((e) => e.checked === true);
@@ -263,20 +277,17 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
 
         if (checkedChannels.length === channelsCopy.length) {
             setCheckState(NewSceneOverlayDeviceCellGlobalCheckState.all);
-        }
-        else if (uncheckedChannels.length === channelsCopy.length) {
+        } else if (uncheckedChannels.length === channelsCopy.length) {
             setCheckState(NewSceneOverlayDeviceCellGlobalCheckState.none);
-        }
-        else {
+        } else {
             setCheckState(NewSceneOverlayDeviceCellGlobalCheckState.between);
         }
 
         for (var channel of _channels) {
             if (channel.checked) {
-                console.log( channels.find((e) => e.channel === channel.channel));
+                console.log(channels.find((e) => e.channel === channel.channel));
                 onCheckEnable(device.id, channel.channel, channels.find((e) => e.channel === channel.channel).value)
-            }
-            else {
+            } else {
                 onCheckDisable(device.id, [channel.channel]);
             }
         }
@@ -295,24 +306,21 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
     }, []);
 
 
-
-
     return (
         <div className={"border-b border-gray-400 py-1"}>
             <div className={"flex items-center"}>
-                <input type="checkbox" checked={checkState === NewSceneOverlayDeviceCellGlobalCheckState.all} ref={input => {
-                    if (input) {
-                        input.indeterminate = checkState === NewSceneOverlayDeviceCellGlobalCheckState.between
-                    }
-                }} onChange={(e) => {
+                <input type="checkbox" checked={checkState === NewSceneOverlayDeviceCellGlobalCheckState.all}
+                       ref={input => {
+                           if (input) {
+                               input.indeterminate = checkState === NewSceneOverlayDeviceCellGlobalCheckState.between
+                           }
+                       }} onChange={(e) => {
                     setCheckState(e.target.checked ? NewSceneOverlayDeviceCellGlobalCheckState.all : NewSceneOverlayDeviceCellGlobalCheckState.none);
                     if (e.target.checked) {
                         for (var channel of channels) {
                             onCheckEnable(device.id, channel.channel, channel.value)
                         }
-                    }
-
-                    else {
+                    } else {
                         const allChannels = channels.map((e) => e.channel);
                         onCheckDisable(device.id, allChannels)
                     }
@@ -324,13 +332,13 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
                         return newState;
                     })
 
-                }} />
+                }}/>
                 <button className={"flex items-center ml-1"} onClick={() => setShowChannels(!showChannels)}>
                     <div className={"mr-1"}>
                         {showChannels ? (
-                            <ChevronDown size={15} />
+                            <ChevronDown size={15}/>
                         ) : (
-                            <ChevronRight size={15} />
+                            <ChevronRight size={15}/>
                         )}
                     </div>
                     <div className={"flex items-center"}>
@@ -343,20 +351,21 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
             {showChannels ? (
                 <div className={"mx-6"}>
                     {channels.map((channel, index) => (
-                        <NewSceneOverlayDeviceCellChannelView key={JSON.stringify(channel)} channel={channel} index={index} channelcount={channels.length} onValueChange={(newvalue) => {
-                            setChannels((_channels) => {
-                                _channels.find((e) => e.channel === channel.channel).value = newvalue;
-                                return _channels;
-                            })
-                            onValueChange(device.id, channel.channel, newvalue);
-                        }} onCheckChange={(checkState) => {
-                            var channelsCopy = [... channels];
+                        <NewSceneOverlayDeviceCellChannelView key={JSON.stringify(channel)} channel={channel}
+                                                              index={index} channelcount={channels.length}
+                                                              onValueChange={(newvalue) => {
+                                                                  setChannels((_channels) => {
+                                                                      _channels.find((e) => e.channel === channel.channel).value = newvalue;
+                                                                      return _channels;
+                                                                  })
+                                                                  onValueChange(device.id, channel.channel, newvalue);
+                                                              }} onCheckChange={(checkState) => {
+                            var channelsCopy = [...channels];
                             channelsCopy.find((e) => e.channel === channel.channel).checked = checkState;
                             updateGlobalCheckmark(channelsCopy)
                             if (checkState === true) {
                                 onCheckEnable(device.id, channel.channel, channels.find((e) => e.channel === channel.channel).value)
-                            }
-                            else {
+                            } else {
                                 onCheckDisable(device.id, [channel.channel]);
                             }
 
@@ -365,15 +374,16 @@ const NewSceneOverlayDeviceCell: FunctionComponent<NewSceneOverlayDeviceCell_Pro
                                 _channels.find((e) => e.channel === channel.channel).checked = checkState;
                                 return _channels;
                             })
-                        }} />
+                        }}/>
                     ))}
                 </div>
             ) : (
-                <div />
+                <div/>
             )}
         </div>
     )
 }
+
 interface NewSceneOverlayDeviceCellChannelView_Props {
     channel: NewSceneOverlayDeviceCellChannel;
     index: number;
@@ -383,7 +393,13 @@ interface NewSceneOverlayDeviceCellChannelView_Props {
     onCheckChange: (value: boolean) => void;
 }
 
-const NewSceneOverlayDeviceCellChannelView: FunctionComponent<NewSceneOverlayDeviceCellChannelView_Props> = ({channel, index, channelcount, onValueChange, onCheckChange}) => {
+const NewSceneOverlayDeviceCellChannelView: FunctionComponent<NewSceneOverlayDeviceCellChannelView_Props> = ({
+                                                                                                                 channel,
+                                                                                                                 index,
+                                                                                                                 channelcount,
+                                                                                                                 onValueChange,
+                                                                                                                 onCheckChange
+                                                                                                             }) => {
 
     const [channelValue, setChannelValue] = useState(channel.value);
     const [channelChecked, setChannelChecked] = useState(channel.checked);
@@ -394,7 +410,8 @@ const NewSceneOverlayDeviceCellChannelView: FunctionComponent<NewSceneOverlayDev
     }, [channel]);
 
     return (
-        <div className={`${index !== channelcount - 1 ? "border-b border-gray-400 dark:border-gray-600" : ""} flex items-center justify-between`}>
+        <div
+            className={`${index !== channelcount - 1 ? "border-b border-gray-400 dark:border-gray-600" : ""} flex items-center justify-between`}>
             <div className={"flex items-center"}>
                 <input type="checkbox" key={channelChecked ? "yes" : "no"} checked={channelChecked} onChange={(e) => {
                     setChannelChecked(e.target.checked);
@@ -403,12 +420,13 @@ const NewSceneOverlayDeviceCellChannelView: FunctionComponent<NewSceneOverlayDev
                         _channel.find((f) => f.channel === channel.channel).checked = e.target.checked;
                         return _channel;
                     })*/
-                }} className={"mr-2"} />
+                }} className={"mr-2"}/>
                 <p className={"text-sm text-gray-400 mr-2"}>{channel.channel}</p>
                 <p>{channel.name}</p>
             </div>
             <div className={"p-1"}>
-                <input className={"bg-gray-300 dark:bg-gray-700 w-12 text-right rounded-lg"} type={"number"} autoFocus={true} value={channelValue.toString()} onChange={(e) => {
+                <input className={"bg-gray-300 dark:bg-gray-700 w-12 text-right rounded-lg"} type={"number"}
+                       autoFocus={true} value={channelValue.toString()} onChange={(e) => {
                     var input = e.target.value;
                     if (input === "") {
                         input = "0";
@@ -425,10 +443,10 @@ const NewSceneOverlayDeviceCellChannelView: FunctionComponent<NewSceneOverlayDev
                             })*/
                         }
                     }
-                }} />
+                }}/>
             </div>
         </div>
     )
 }
 
-export default  NewSceneOverlay;
+export default NewSceneOverlay;

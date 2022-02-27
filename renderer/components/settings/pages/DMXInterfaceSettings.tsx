@@ -7,14 +7,14 @@ import {v4 as uuidv4} from "uuid";
 import DMXFX5Settings from "./DMXInterfaceSettings/FX5Settings";
 import styles from "../../../styles/Dashboard_Sidebar.module.css"
 import {CheckCircle} from "react-feather";
-import {set as setCookie, remove as removeCookie} from 'es-cookie';
+import {remove as removeCookie, set as setCookie} from 'es-cookie';
 
 
 const DMXInterfaceSettings: FunctionComponent = ({}) => {
 
     const router = useRouter();
 
-    const { projectManager, addNotification } = useContext(AppControlContext);
+    const {projectManager, addNotification} = useContext(AppControlContext);
 
     const [interfaceServers, setInterfaceServers] = useState<InterfaceServerEntry[]>([
         {
@@ -27,7 +27,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
 
     const [availableInterfaces, setAvailableInterfaces] = useState<FoundInterface[]>([]);
 
-    const [ selectedInterface, setSelectedInterface ] = useState<FoundInterface | null>(null);
+    const [selectedInterface, setSelectedInterface] = useState<FoundInterface | null>(null);
 
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
             const status = await server.handler.isRunning();
             setInterfaceServers((e) => {
                 e.find((i) => i.id === server.id).status = status == true ? InterfaceServerStatus.running : InterfaceServerStatus.dead
-                const newarray = [... e];
+                const newarray = [...e];
                 return newarray;
             })
         }
@@ -70,8 +70,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
             try {
                 await projectManager.interface.closeLink()
                 projectManager.interface = undefined;
-            }
-            catch(err) {
+            } catch (err) {
                 const notification: NotificationCenterElement = {
                     uid: uuidv4(),
                     text: err,
@@ -94,14 +93,17 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
             if (newInterface.type === "fx5") {
 
                 projectManager.interface = new FX5Interface(newInterface.id)
-                    try {
-                        const openResult = await projectManager.interface.openLink();
+                try {
+                    const openResult = await projectManager.interface.openLink();
                     if (openResult) {
                         setSelectedInterface(availableInterfaces.find((e) => e.id === id));
-                        setCookie("dmxInterface", JSON.stringify({type: newInterface.type, serial: newInterface.serial, mode: (projectManager.interface as FX5Interface).dmxMode}), {expires: 365})
+                        setCookie("dmxInterface", JSON.stringify({
+                            type: newInterface.type,
+                            serial: newInterface.serial,
+                            mode: (projectManager.interface as FX5Interface).dmxMode
+                        }), {expires: 365})
                     }
-                }
-                catch(err) {
+                } catch (err) {
                     const notification: NotificationCenterElement = {
                         uid: uuidv4(),
                         text: err,
@@ -110,8 +112,7 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                     }
                     addNotification(notification)
                 }
-            }
-            else {
+            } else {
                 console.error("Interface not supported!")
             }
         }
@@ -149,13 +150,13 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                                     // @ts-ignore
                                     {
                                         0: (
-                                            <div className={"self-center w-4 h-4 rounded-full bg-red-500"} />
+                                            <div className={"self-center w-4 h-4 rounded-full bg-red-500"}/>
                                         ),
                                         1: (
-                                            <div className={"self-center w-4 h-4 rounded-full bg-gray-500"} />
+                                            <div className={"self-center w-4 h-4 rounded-full bg-gray-500"}/>
                                         ),
                                         2: (
-                                            <div className={"self-center w-4 h-4 rounded-full bg-green-500"} />
+                                            <div className={"self-center w-4 h-4 rounded-full bg-green-500"}/>
                                         )
 
                                     }[server.status]
@@ -171,14 +172,17 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                         {availableInterfaces.length > 0 ? (
                             <ul>
                                 {availableInterfaces.map((_interface) => (
-                                    <button key={_interface.id} className={`bg-gray-200 dark:bg-gray-800 rounded-lg text-left p-2 ${selectedInterface?.id === _interface.id}`} onClick={() => {
-                                        switchSelectedInterface(_interface.id)
-                                    }}>
+                                    <button key={_interface.id}
+                                            className={`bg-gray-200 dark:bg-gray-800 rounded-lg text-left p-2 ${selectedInterface?.id === _interface.id}`}
+                                            onClick={() => {
+                                                switchSelectedInterface(_interface.id)
+                                            }}>
                                         <div className={"flex"}>
                                             {_interface.id === selectedInterface?.id ? (
-                                                <CheckCircle className={"self-center mr-2"} size={18} color={"#22c55e"} />
+                                                <CheckCircle className={"self-center mr-2"} size={18}
+                                                             color={"#22c55e"}/>
 
-                                            ) : (<div />)}
+                                            ) : (<div/>)}
                                             <div className={"flex flex-col"}>
                                                 <h3 className={"text-md font-semibold"}>{_interface.name}</h3>
                                                 <p className={"italic text-sm text-gray-500"}>{_interface.serial}</p>
@@ -194,20 +198,21 @@ const DMXInterfaceSettings: FunctionComponent = ({}) => {
                         )}
                         <button className={"bg-blue-500 rounded-xl px-4 py-2 text-white mt-4"} onClick={async () => {
                             await getAvailableInterfaces();
-                        }}>Scan</button>
+                        }}>Scan
+                        </button>
                     </div>
 
                 </div>
                 {selectedInterface !== null ? (
                     <div className={"mt-8"}>
                         {selectedInterface.type == "fx5" ? (
-                            <DMXFX5Settings selectedInterface={selectedInterface} />
+                            <DMXFX5Settings selectedInterface={selectedInterface}/>
                         ) : (
                             <p>Interface not supported!</p>
                         )}
 
                     </div>
-                ) : (<div />)}
+                ) : (<div/>)}
             </div>
         </div>
     )

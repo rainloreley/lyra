@@ -1,14 +1,13 @@
-import { FunctionComponent, useContext, useEffect, useState } from 'react';
+import {FunctionComponent, useContext, useEffect} from 'react';
 import styles from '../../../styles/Dashboard_Sidebar.module.css';
-import {
-    AppControlContext,
-} from '../../appContextProvider';
+import {AppControlContext,} from '../../appContextProvider';
+
 const appData = require('app-data-folder');
 const appDataFolder = appData('lyra');
 
 const DeviceManagagementSettings: FunctionComponent = ({}) => {
 
-    const { addNotification } = useContext(AppControlContext);
+    const {addNotification} = useContext(AppControlContext);
 
     useEffect(() => {
         getRemoteDevices();

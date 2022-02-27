@@ -9,12 +9,27 @@ abstract class DMXInterface {
     }
 
 
-    public static findInterfaces(): Promise<FoundInterface[]> { return};
-    public static isRunning(): Promise<boolean> {return};
-    openLink(): Promise<boolean> {return};
-    closeLink(): Promise<boolean> {return};
-    sendDMX(channel: number, value: number) {};
-    sendDMXMap(map: DMXMapElement[]) {};
+    public static findInterfaces(): Promise<FoundInterface[]> {
+        return
+    };
+
+    public static isRunning(): Promise<boolean> {
+        return
+    };
+
+    openLink(): Promise<boolean> {
+        return
+    };
+
+    closeLink(): Promise<boolean> {
+        return
+    };
+
+    sendDMX(channel: number, value: number) {
+    };
+
+    sendDMXMap(map: DMXMapElement[]) {
+    };
 
 }
 

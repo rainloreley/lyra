@@ -10,4 +10,4 @@ interface DMX_DeviceStateSnapshotChannelValue {
 }
 
 export default DMX_DeviceStateSnapshot
-export type { DMX_DeviceStateSnapshotChannelValue }
+export type {DMX_DeviceStateSnapshotChannelValue}

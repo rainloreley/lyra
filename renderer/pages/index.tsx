@@ -2,7 +2,7 @@ import {NextPage} from "next";
 import {useRouter} from "next/dist/client/router";
 import {useContext, useEffect} from "react";
 import {AppControlContext} from "../components/appContextProvider";
-import dmxDevices, { getAllDevicesFromFolder } from "../devices/devicelist";
+import dmxDevices, {getAllDevicesFromFolder} from "../devices/devicelist";
 
 const Index: NextPage = () => {
     const router = useRouter();
@@ -17,7 +17,7 @@ const Index: NextPage = () => {
         'ARE WE THERE YET???',
     ];
 
-    const { projectManager } = useContext(AppControlContext);
+    const {projectManager} = useContext(AppControlContext);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -30,8 +30,7 @@ const Index: NextPage = () => {
         }
         if (projectManager.currentProject === null) {
             router.push("/home")
-        }
-        else {
+        } else {
             const returnto = router.query.returnto;
             if (typeof returnto === 'string') {
                 router.push(returnto);

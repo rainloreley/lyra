@@ -9,7 +9,7 @@ import {DDMUICCDropdownOptionType} from "../../../../devices/device_definitions"
 import {FoundInterface} from "../../../../backend/Interface/DMXInterface";
 import FX5Interface from "../../../../backend/Interface/DMXI_FX5";
 import {v4 as uuidv4} from "uuid";
-import {set as setCookie, get as getCookie} from 'es-cookie';
+import {get as getCookie, set as setCookie} from 'es-cookie';
 
 interface DMXFX5Settings_Props {
     selectedInterface: FoundInterface
@@ -17,7 +17,7 @@ interface DMXFX5Settings_Props {
 
 const DMXFX5Settings: FunctionComponent<DMXFX5Settings_Props> = ({selectedInterface}) => {
 
-    const { projectManager, addNotification } = useContext(AppControlContext);
+    const {projectManager, addNotification} = useContext(AppControlContext);
 
     const [selectedMode, setSelectedMode] = useState<number>((projectManager.interface as FX5Interface).dmxMode);
 
@@ -38,8 +38,7 @@ const DMXFX5Settings: FunctionComponent<DMXFX5Settings_Props> = ({selectedInterf
                 }
 
             }
-        }
-        catch(err) {
+        } catch (err) {
             const notification: NotificationCenterElement = {
                 uid: uuidv4(),
                 text: err,

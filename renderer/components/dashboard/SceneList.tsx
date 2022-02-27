@@ -23,7 +23,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
 
     const [scenes, setScenes] = useState<DMXProjectScene[]>([]);
 
-    const { projectManager, sendDMXMap, setOverlayView } = useContext(AppControlContext);
+    const {projectManager, sendDMXMap, setOverlayView} = useContext(AppControlContext);
 
 
     useEffect(() => {
@@ -43,8 +43,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
     const loadScenes = (group: DMXProjectSceneGroup = selectedGroup, allGroups: DMXProjectSceneGroup[] = groups, filter = searchField) => {
         if (group !== null) {
             setScenes(group.scenes.filter((e) => e.name.toLowerCase().includes(filter.toLowerCase())));
-        }
-        else {
+        } else {
             var allScenes: DMXProjectScene[] = [];
             for (var _g of allGroups) {
                 allScenes = allScenes.concat(_g.scenes);
@@ -119,20 +118,24 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
             <div className={"dark:bg-gray-800 bg-gray-200 h-full p-4 shadow-2xl rounded-2xl flex flex-col w-80"}>
                 <div className={"flex justify-between items-center mb-2"}>
                     <h1 className={"font-bold text-xl dark:text-white"}>Scenes</h1>
-                    <CloseButton buttonPressed={closeView} size={5} />
+                    <CloseButton buttonPressed={closeView} size={5}/>
                 </div>
                 <div className={"flex flex-wrap pb-1"}>
-                    <GroupButtonElement name={"All"} color={"#9ca3af"} isSelected={selectedGroup === null} onSelect={() => {
-                        changedSelectedGroup(null)
-                    }} />
+                    <GroupButtonElement name={"All"} color={"#9ca3af"} isSelected={selectedGroup === null}
+                                        onSelect={() => {
+                                            changedSelectedGroup(null)
+                                        }}/>
                     {groups.map((group) => (
-                        <GroupButtonElement key={group.id} name={group.name} color={group.color} isSelected={(selectedGroup?.id || "") === group.id} onSelect={() => {
+                        <GroupButtonElement key={group.id} name={group.name} color={group.color}
+                                            isSelected={(selectedGroup?.id || "") === group.id} onSelect={() => {
                             changedSelectedGroup(group)
-                        }} />
+                        }}/>
                     ))}
                 </div>
                 <div className={"border-b border-gray-400 dark:border-gray-600 w-full px-2 pb-2"}>
-                    <input className={"border bg-gray-300 border-gray-400 dark:border-gray-500 dark:bg-gray-600 rounded-lg w-full px-1"} placeholder={"Search"} value={searchField} onChange={(event) => {
+                    <input
+                        className={"border bg-gray-300 border-gray-400 dark:border-gray-500 dark:bg-gray-600 rounded-lg w-full px-1"}
+                        placeholder={"Search"} value={searchField} onChange={(event) => {
                         setSearchField(event.target.value);
                         loadScenes(selectedGroup, groups, event.target.value)
                     }}/>
@@ -141,7 +144,8 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
                     {scenes.length > 0 ? (
                         <ul>
                             {scenes.map((scene, index) => (
-                                <div key={scene.id} className={`p-4 flex justify-between ${index !== scenes.length - 1 ? "border-b border-gray-400" : ""}`}>
+                                <div key={scene.id}
+                                     className={`p-4 flex justify-between ${index !== scenes.length - 1 ? "border-b border-gray-400" : ""}`}>
                                     <div>
                                         <h3 className={"text-md font-semibold"}>{scene.name}</h3>
                                         <p className={"text-sm text-gray-400"}>Fade: {moment(scene.fadein_time).format("ss.SS")}s</p>
@@ -150,7 +154,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
                                         <button onClick={() => {
                                             runScene(scene);
                                         }}>
-                                            <Play size={18} color={"#22c55e"} />
+                                            <Play size={18} color={"#22c55e"}/>
                                         </button>
                                     </div>
                                 </div>
@@ -165,8 +169,9 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
                 <div className={"flex justify-end border-t border-gray-400 dark:border-gray-600 pt-2"}>
                     <div>
                         <button className={"bg-blue-500 text-white rounded-xl w-10 h-10 text-xl"} onClick={() => {
-                            setOverlayView(<NewSceneOverlay />);
-                        }}>+</button>
+                            setOverlayView(<NewSceneOverlay/>);
+                        }}>+
+                        </button>
                     </div>
                 </div>
             </div>
@@ -183,9 +188,11 @@ interface GroupButtonElement_Props {
 
 const GroupButtonElement: FunctionComponent<GroupButtonElement_Props> = ({name, color, isSelected, onSelect}) => {
     return (
-        <button className={`p-1 px-2 text-xs m-1 border ${isSelected ? "border-yellow-500 dark:border-yellow-300" : "border-gray-400 dark:border-gray-500"} rounded-full`} onClick={() => onSelect()}>
+        <button
+            className={`p-1 px-2 text-xs m-1 border ${isSelected ? "border-yellow-500 dark:border-yellow-300" : "border-gray-400 dark:border-gray-500"} rounded-full`}
+            onClick={() => onSelect()}>
             <div className={"flex items-center"}>
-                <div style={{backgroundColor: color}} className={`rounded-full w-4 h-4 mr-1`} />
+                <div style={{backgroundColor: color}} className={`rounded-full w-4 h-4 mr-1`}/>
                 <p>{name}</p>
             </div>
         </button>
