@@ -7,6 +7,7 @@ import ProjectManager from "../backend/ProjectManager";
 import fs from "fs";
 import DMXProject from "../backend/structs/DMXProject";
 import {useRouter} from "next/dist/client/router";
+import {io} from "socket.io-client";
 
 type AppControlHandlerProps = {
     projectManager: ProjectManager;
@@ -17,6 +18,7 @@ type AppControlHandlerProps = {
     saveProject: (_project: DMXProject) => void;
     setOverlayView: Dispatch<SetStateAction<ReactElement>>;
     deleteDevice: (_deviceid: string) => void;
+    executeScene: (map: DMXMapElement[], time: number) => void;
 
 };
 
@@ -44,11 +46,27 @@ const AppControlProvider = ({children}) => {
     var notificationcenterInterval: NodeJS.Timeout;
     var autosaveInterval: NodeJS.Timeout;
 
+    // fill an array with 512 entries
+    // @ts-ignore
+    const [dmxoutmap, setdmxoutmap] = useState<DMXMapElement[]>([... Array(512).keys()].map((i) => {
+        return {
+            channel: i + 1,
+            value: 0
+        }
+    }));
+
+
     const [projectManager, setProjectManager] = useState<ProjectManager>(new ProjectManager());
     const [overlayView, setOverlayView] = useState<ReactElement | null>(null);
 
 
     useEffect(() => {
+        /*for (var i = 0; i < 512; i++) {
+            dmxoutmap.push({
+                channel: i + 1,
+                value: 0
+            })
+        }*/
         clearInterval(notificationcenterInterval);
         clearInterval(autosaveInterval);
         notificationcenterInterval = setInterval(() => {
@@ -127,6 +145,12 @@ const AppControlProvider = ({children}) => {
         if (projectManager.interface !== undefined) {
             projectManager.interface.sendDMX(start_channel + channel - 1, value);
         }
+        setdmxoutmap((e) => {
+            e[channel - 1].value = value;
+            return e;
+        })
+        console.log(dmxoutmap[channel - 1].value)
+        console.log(dmxoutmap[channel - 1].channel)
         setProjectManager((e) => {
             e.currentProject.devices.find((device) => device.start_channel === start_channel).channel_state.find((state) => state.channel === channel).value = value;
             return e;
@@ -146,7 +170,12 @@ const AppControlProvider = ({children}) => {
 
         setProjectManager((e) => {
             for (var map_element of map) {
-                const device = e.currentProject.devices.find((e) => e.id === map_element.device);
+                setdmxoutmap((e) => {
+                    e[map_element.channel - 1].value = map_element.value;
+                    return e;
+                });
+                const device = e.currentProject.devices.find((e) => e.channel_state.find((f) => f.channel === map_element.channel) !== undefined)
+                //const device = e.currentProject.devices.find((e) => e.id === map_element.device);
                 if (device) {
                     device.channel_state.find((e) => e.channel === map_element.channel - device.start_channel + 1).value = map_element.value;
                 }
@@ -221,6 +250,54 @@ const AppControlProvider = ({children}) => {
         }
     }
 
+    function executeScene(map: DMXMapElement[], time: number) {
+        if (time < 100) {
+            sendDMXMap(map);
+        }
+        else {
+            linearDMXFade(map, time);
+        }
+    }
+
+    function linearDMXFade(to: DMXMapElement[], time: number) {
+        const repeatingTime = 50 // repeat function every 50 ms
+        const requiredIterations = time / repeatingTime; // repeat function this often
+        var passedIterations = 0; // value how often a function has been called
+
+        var channelsToChange: AnimationDMXMapElement[] = [];
+        for (var i = 0; i < 512; i++) {
+            if (dmxoutmap[i].value !== to[i].value) {
+
+                // this value contains the amount the value of a certain channel needs to be increased to reach the target value after `requiredIterations`-times
+                const stepsToTake = (to[i].value - dmxoutmap[i].value) / requiredIterations;
+
+                channelsToChange.push({
+                    channel: i + 1,
+                    initialValue: dmxoutmap[i].value,
+                    targetValue: to[i].value,
+                    currentValue: dmxoutmap[i].value,
+                    stepsToTake: stepsToTake
+                })
+            }
+        }
+
+
+        var animation = setInterval(() => {
+            // if the function has been called often enough, cancel it
+            if (passedIterations >= requiredIterations) {
+                clearInterval(animation);
+                return;
+            }
+
+            for (var channel of channelsToChange) {
+                channel.currentValue += channel.stepsToTake;
+                sendDMXCommand(1, channel.channel, channel.currentValue);
+            }
+
+            passedIterations += 1;
+        }, repeatingTime)
+    }
+
     const state: AppControlHandlerProps = {
         projectManager: projectManager,
         setProjectManager: setProjectManager,
@@ -229,7 +306,8 @@ const AppControlProvider = ({children}) => {
         sendDMXMap: sendDMXMap,
         saveProject: saveProject,
         setOverlayView: setOverlayView,
-        deleteDevice: deleteDevice
+        deleteDevice: deleteDevice,
+        executeScene: executeScene
     }
 
     return (
@@ -294,8 +372,16 @@ const AppControlProvider = ({children}) => {
 
 interface DMXMapElement {
     channel: number;
-    device: string;
+    //device: string;
     value: number;
+}
+
+interface AnimationDMXMapElement {
+    channel: number;
+    initialValue: number;
+    targetValue: number;
+    currentValue: number;
+    stepsToTake: number;
 }
 
 export type {NotificationCenterElement, DMXMapElement};

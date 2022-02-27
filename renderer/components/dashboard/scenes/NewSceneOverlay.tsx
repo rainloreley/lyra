@@ -26,6 +26,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
     const [groups, setGroups] = useState<DMXProjectSceneGroup[]>(
         []
     )
+    const [fadeInTime, setFadeInTime] = useState<string>("0");
     const [selectedGroup, setSelectedGroup] = useState<DMXProjectSceneGroup | null>(null);
 
     const [channelData, setChannelData] = useState<ChannelElement[]>([]);
@@ -110,6 +111,11 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
             return;
         }
 
+        if (isNaN(parseInt(fadeInTime)) || parseInt(fadeInTime) < 0) {
+            setIsSaving(false);
+            return;
+        }
+
         // we have a little problem here because in this view, we stored the channel states
         // in the wrong format:
         // array of { device_id, channel, value }
@@ -158,7 +164,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
         var packedScene: DMXProjectScene = {
             id: uuidv4(),
             name: sceneName,
-            fadein_time: 0,
+            fadein_time: parseInt(fadeInTime),
             device_states: convertedDeviceStates
         }
 
@@ -188,6 +194,26 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                                setSceneNameModified(true);
                                setSceneName(e.target.value)
                            }}/>
+                </div>
+                <div className={"mt-2 mx-1"}>
+                    <p className={"text-sm text-gray-500"}>Fade-in time</p>
+                    <div className={"flex items-center"}>
+                        <input value={fadeInTime} type={"number"} className={`p-1 bg-gray-200 w-16 font-bold text-sm rounded-xl border border-gray-400 text-black dark:text-white dark:bg-gray-700 dark:border-gray-600`} onChange={(e) => {
+                            var newValue = parseInt(e.target.value);
+                            if (isNaN(newValue)) {
+                                newValue = 0;
+                            }
+                            if (newValue < 0) {
+                                return;
+                            }
+                            if (newValue > 5000) {
+                                return;
+                            }
+                            console.log(newValue)
+                            setFadeInTime(`${newValue}`)
+                        }} />
+                        <p className={"ml-1 text-sm text-gray-500"}>ms</p>
+                    </div>
                 </div>
                 <div className={"mt-2"}>
                     <div className={"flex flex-wrap pb-1"}>

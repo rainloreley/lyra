@@ -120,11 +120,15 @@ class FX5Interface extends DMXInterface {
     }
 
     sendDMX(channel: number, value: number) {
+        this.dmxoutmap[channel - 1].value = value;
         this.socket.emit("setdmx", {channel: channel, value: value});
     }
 
     sendDMXMap(map: DMXMapElement[]) {
         this.socket.emit("setdmxmap", map);
+        for (var channel of map) {
+            this.dmxoutmap[channel.channel - 1].value = channel.value
+        }
     }
 
 

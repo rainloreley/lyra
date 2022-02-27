@@ -23,7 +23,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
 
     const [scenes, setScenes] = useState<DMXProjectScene[]>([]);
 
-    const {projectManager, sendDMXMap, setOverlayView} = useContext(AppControlContext);
+    const {projectManager, sendDMXMap, setOverlayView, executeScene} = useContext(AppControlContext);
 
 
     useEffect(() => {
@@ -71,7 +71,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
             dmxoutmap.push({
                 channel: i + 1,
                 value: 0,
-                device: "",
+                //device: "",
             })
         }
 
@@ -83,7 +83,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
             const start_channel = device.start_channel;
             for (var channel of device.channel_state) {
                 dmxoutmap.find((e) => e.channel === start_channel + channel.channel - 1).value = channel.value;
-                dmxoutmap.find((e) => e.channel === start_channel + channel.channel - 1).device = device.id;
+                //dmxoutmap.find((e) => e.channel === start_channel + channel.channel - 1).device = device.id;
             }
         }
 
@@ -101,7 +101,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
             if (device) {
                 for (var channel of device_state.channels) {
                     dmxoutmap.find((e) => e.channel === device.start_channel + channel.channel - 1).value = channel.value;
-                    dmxoutmap.find((e) => e.channel === device.start_channel + channel.channel - 1).device = device.id;
+                    //dmxoutmap.find((e) => e.channel === device.start_channel + channel.channel - 1).device = device.id;
                 }
             }
         }
@@ -109,7 +109,8 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
         // at the end, we send that data to a function in the context
         // that accepts dmx maps and forwards them to the right dmx server
 
-        sendDMXMap(dmxoutmap);
+        //sendDMXMap(dmxoutmap);
+        executeScene(dmxoutmap, scene.fadein_time);
 
     }
 
