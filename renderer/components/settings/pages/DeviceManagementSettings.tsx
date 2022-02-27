@@ -7,15 +7,14 @@ const appDataFolder = appData('lyra');
 
 const DeviceManagagementSettings: FunctionComponent = ({}) => {
 
-    const {addNotification} = useContext(AppControlContext);
 
     useEffect(() => {
         getRemoteDevices();
     }, []);
 
-    function getInstalledDevices() {
+    /*function getInstalledDevices() {
 
-    }
+    }*/
 
     function getRemoteDevices() {
     }

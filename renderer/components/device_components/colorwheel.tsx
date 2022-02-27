@@ -43,8 +43,8 @@ const DeviceColorWheel: FunctionComponent<Device_Colorwheel> = ({
                     <button
                         key={subset.value}
                         className="rounded-full w-6 h-6"
-                        onClick={(e) => {
-                            const {start, end} = getRangeOfValueFromString(subset.value);
+                        onClick={(_) => {
+                            const {start} = getRangeOfValueFromString(subset.value);
                             valueupdate(start);
                             setSelectedColor(subset.value);
                         }}

@@ -12,15 +12,6 @@ class DMXProject {
     devices: DMXProjectDevice[];
     scene_groups: DMXProjectSceneGroup[];
 
-    getDeviceById(id: string): DMXProjectDevice | null {
-        const foundDevice = this.devices.find((e) => e.id === id);
-        if (foundDevice !== undefined) {
-            return foundDevice;
-        } else {
-            return null;
-        }
-    }
-
     constructor(json: any, replaceUUID: boolean = true) {
         this.name = json.name;
         this.uid = json.uid;
@@ -96,6 +87,15 @@ class DMXProject {
                 },
             ],
         });
+    }
+
+    getDeviceById(id: string): DMXProjectDevice | null {
+        const foundDevice = this.devices.find((e) => e.id === id);
+        if (foundDevice !== undefined) {
+            return foundDevice;
+        } else {
+            return null;
+        }
     }
 }
 

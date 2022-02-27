@@ -2,9 +2,9 @@ import React, {useContext} from 'react';
 import Head from 'next/head';
 import {ipcRenderer} from 'electron';
 import {
-	AppControlContext,
-	NotificationCenterElement,
-	NotificationCenterElementStatus,
+    AppControlContext,
+    NotificationCenterElement,
+    NotificationCenterElementStatus,
 } from '../components/appContextProvider';
 import {v4 as uuidv4} from 'uuid';
 import {useRouter} from 'next/router';
