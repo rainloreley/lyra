@@ -90,6 +90,14 @@ const AppControlProvider = ({ children }) => {
 			}
 		});
 
+		ipcRenderer.on("shortcut::save-and-close-project", () => {
+			if (projectManager.currentProject !== undefined) {
+				saveProject(projectManager.currentProject)
+				setProjectManager(new ProjectManager());
+				router.push("/")
+			}
+		})
+
 		ipcRenderer.on('show-error', (event, error) => {
 			const notification: NotificationCenterElement = {
 				uid: uuidv4(),

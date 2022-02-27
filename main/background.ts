@@ -53,6 +53,12 @@ var mainWindow: Electron.CrossProcessExports.BrowserWindow;
 					click: () => {
 						mainWindow.webContents.send("shortcut::open-settings")
 					}
+				},
+				{
+					label: "Save and close project",
+					click: () => {
+						mainWindow.webContents.send("shortcut::save-and-close-project")
+					}
 				}
 			]
 		},

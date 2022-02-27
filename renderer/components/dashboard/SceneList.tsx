@@ -115,7 +115,7 @@ const SceneList: FunctionComponent<SceneList_Props> = ({closeView}) => {
     }
 
     return (
-        <div className={"top-4 bottom-4 right-4 absolute"}>
+        <div className={"pb-4 my-2 mx-2 flex"}>
             <div className={"dark:bg-gray-800 bg-gray-200 h-full p-4 shadow-2xl rounded-2xl flex flex-col w-80"}>
                 <div className={"flex justify-between items-center mb-2"}>
                     <h1 className={"font-bold text-xl dark:text-white"}>Scenes</h1>

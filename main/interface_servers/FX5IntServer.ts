@@ -118,16 +118,16 @@ class FX5IntServer {
         this.expApp.post("/open", this._httpOpenLinkInterfacesHandler.bind(this));
         this.expApp.post("/close", this._httpCloseLinkInterfacesHandler.bind(this));
         this.expApp.post("/mode", this._httpSetDMXModeHandler.bind(this));
-        this.expApp.listen(3018, () => {
+        this.expApp.listen(3018, "localhost", () => {
             console.log("Express server for node FX5 running")
         })
 
         this.io = new Server({
             cors: {
-                origin: '*',
+                origin: ["http://localhost:8888"],
             }
         });
-        this.io.listen(3019)
+        this.io.listen(3019,)
         this.io.on("connection", (socket) => {
 
             socket.on("setdmx", (arg1) => {

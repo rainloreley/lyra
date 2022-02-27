@@ -5,6 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import CloseButton from "../../components/small/close_button";
 import DMXInterfaceSettings from "../../components/settings/pages/DMXInterfaceSettings";
 import SettingsAbout from "../../components/settings/pages/SettingsAbout";
+import DeviceManagagementSettings from "../../components/settings/pages/DeviceManagementSettings";
+import USBPortIcon from "../../components/icons/usb-port";
+import MovingHeadIcon from "../../components/icons/moving-head";
+import SettingsIcon from "../../components/icons/settings";
+import {Info, Settings} from "react-feather";
 
 const SettingsIndex: NextPage = () => {
     const router = useRouter();
@@ -13,16 +18,25 @@ const SettingsIndex: NextPage = () => {
         {
             id: "001",
             title: "General",
+            icon: <Settings width={"20px"} />,
             element: <p>Nothing here yet :(</p>
         },
         {
             id: "002",
-            title: "DMX Interface",
-            element: <DMXInterfaceSettings />
+            title: "Device Management",
+            icon: <MovingHeadIcon />,
+            element: <DeviceManagagementSettings />
         },
         {
             id: "003",
+            title: "DMX Interface",
+            icon: <USBPortIcon />,
+            element: <DMXInterfaceSettings />
+        },
+        {
+            id: "004",
             title: "About",
+            icon: <Info width={"20px"} />,
             element: <SettingsAbout />
         }
     ]
@@ -44,10 +58,13 @@ const SettingsIndex: NextPage = () => {
                     <div className={"mt-4"}>
                         <ul className={"flex flex-col"}>
                             {sidebarItems.map((item) => (
-                                <button key={item.id} className={`mx-2 py-1 text-left mb-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedItem === item.id ? "bg-gray-100 dark:bg-gray-700" : ""}`} onClick={() => {
+                                <button key={item.id} className={`mx-2 h-8 py-1 text-left mb-2 flex items-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedItem === item.id ? "bg-gray-100 dark:bg-gray-700" : ""}`} onClick={() => {
                                     setSelectedItem(item.id)
                                 }}>
-                                    <p className={"mx-2 text-md"}>{item.title}</p>
+                                    <div className={"w-5 mx-2"}>
+                                        {item.icon}
+                                    </div>
+                                    <p className={"mx-2 text-sm"}>{item.title}</p>
                                 </button>
                             ))}
                         </ul>
@@ -69,6 +86,7 @@ const SettingsIndex: NextPage = () => {
 interface SidebarItem {
     id: string;
     title: string;
+    icon: ReactElement;
     element: ReactElement;
 }
 
