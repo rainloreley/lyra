@@ -180,7 +180,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
     return (
         <div
             className={"bg-gray-200 dark:bg-gray-800 shadow-2xl p-4 rounded-xl flex flex-col justify-between text-black dark:text-white"}
-            style={{height: "80%", maxWidth: "60%"}}>
+            style={{height: "80%", minWidth: "35%", maxWidth: "60%"}}>
             <div className={"flex flex-col"} style={{height: "90%"}}>
                 <div className={"mb-2"}>
                     <CloseButton buttonPressed={() => {
@@ -196,7 +196,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                            }}/>
                 </div>
                 <div className={"mt-2 mx-1"}>
-                    <p className={"text-sm text-gray-500"}>Fade-in time</p>
+                    <p className={"text-sm text-gray-500 dark:text-gray-400"}>Fade-in time</p>
                     <div className={"flex items-center"}>
                         <input value={fadeInTime} type={"number"} className={`p-1 bg-gray-200 w-16 font-bold text-sm rounded-xl border border-gray-400 text-black dark:text-white dark:bg-gray-700 dark:border-gray-600`} onChange={(e) => {
                             var newValue = parseInt(e.target.value);
@@ -212,7 +212,7 @@ const NewSceneOverlay: FunctionComponent = ({}) => {
                             console.log(newValue)
                             setFadeInTime(`${newValue}`)
                         }} />
-                        <p className={"ml-1 text-sm text-gray-500"}>ms</p>
+                        <p className={"ml-1 text-sm text-gray-500  dark:text-gray-400"}>ms</p>
                     </div>
                 </div>
                 <div className={"mt-2"}>
