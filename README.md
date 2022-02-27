@@ -29,11 +29,7 @@ After a recent update ([b85aac6](https://github.com/rainloreley/lyra/commit/b85a
 
 A documentation for these `.ldf` files can be found [here](https://wiki.lory.dev/en/lyra/ldf-files)
 
-Click on one of the devices below to download its `.ldf` file
-
-- (Stairville MH-X50+ LED Spot) currently unavailable
-- [Stairville LED Flood TRI Panel 7x3W RGB](https://dl.abmgrt.dev/lyra/device_configs/Stairville_LEDFloodTRIPanel7x3WRGB.ldf)
-- [Generic Dimmer](https://dl.abmgrt.dev/lyra/device_configs/GenericDimmer.ldf)
+[All device files are available here](https://github.com/rainloreley/lyra-ldf-server/tree/main/devices)
 
 ## Supported DMX interfaces
 
